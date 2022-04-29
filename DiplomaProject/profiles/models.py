@@ -1,14 +1,33 @@
 from django.db import models
-
-from django.conf import settings
+from django.core.validators import RegexValidator
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Profile(models.Model):
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
+        User,
         on_delete=models.CASCADE
     )
     role = models.CharField(
+        verbose_name='Роль',
         max_length=1,
         choices=[('C', 'клиент'), ('E', 'сотрудник'), ('A', 'администратор')],
         default='C'
     )
+    phone_regex = RegexValidator(regex = r'^\+?7?\d{9,10}$', message = "Номер телефона необходимо вводить в формате: '+79991234567'.")
+    phone_number = models.CharField(
+        verbose_name='Телефон',
+        max_length=12,
+        validators=[phone_regex],
+        blank=True
+    )
+
+    def __str__(self):
+        return self.user.username
+
+@receiver(post_save, sender=User)
+def update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    instance.profile.save()
