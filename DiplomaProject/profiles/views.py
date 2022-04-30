@@ -1,10 +1,5 @@
 from django.shortcuts import render, redirect
-# from django.contrib.auth.forms import UserCreationForm
-# from django.urls import reverse_lazy
-# from django.views import generic
-
 from .forms import SignUpForm
-# from .models import Profile
 
 def index(request):
     if request.user.is_authenticated:
@@ -14,19 +9,16 @@ def index(request):
             return redirect('employee')
         elif request.user.profile.role == 'C':
             return redirect('client')
-    return render(request, 'profile.html')
+    return render(request, 'profile.html', {'styles': 'index'})
 
 def client(request):
     return render(request, 'client.html')
 
 def admin(request):
-    return render(request, 'admin.html')
+    return render(request, 'admin.html', {'styles': 'index'})
 
 def employee(request):
     return render(request, 'employee.html')
-
-# def update_user_data(user):
-#     Profile.objects.update_or_create(user=user, defaults={'phone_number': user.profile.phone_number})
 
 def signup(request):
     if request.method == 'POST':
@@ -42,8 +34,3 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
-
-# class SignUpView(generic.CreateView):
-#     form_class = UserCreationForm
-#     success_url = reverse_lazy('login')
-#     template_name = 'registration/signup.html'
