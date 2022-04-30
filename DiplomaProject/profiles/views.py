@@ -9,13 +9,13 @@ def index(request):
             return redirect('employee')
         elif request.user.profile.role == 'C':
             return redirect('client')
-    return render(request, 'profile.html', {'styles': 'index'})
+    return render(request, 'profile.html')
 
 def client(request):
     return render(request, 'client.html')
 
 def admin(request):
-    return render(request, 'admin.html', {'styles': 'index'})
+    return render(request, 'admin.html')
 
 def employee(request):
     return render(request, 'employee.html')

@@ -3,6 +3,8 @@ from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.auth import get_user_model
+from django.utils.timezone import now
 
 class Profile(models.Model):
     user = models.OneToOneField(
@@ -24,10 +26,42 @@ class Profile(models.Model):
     )
 
     def __str__(self):
-        return self.user.username
+        return self.user.get_full_name()
 
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     instance.profile.save()
+
+def get_deleted_user():
+    return get_user_model().objects.get_or_create(username='deleted')[0]
+
+class Shift(models.Model):
+    id = models.AutoField(primary_key=True)
+    date = models.DateField(
+        verbose_name='Дата',
+        default=now
+    )
+    status = models.CharField(
+        verbose_name='Статус смены',
+        max_length=1,
+        choices=[
+            ('N', 'Не подтверждено'),
+            ('S', 'Подтверждено')
+        ],
+        default='N'
+    )
+    master = models.ForeignKey(
+        Profile,
+        on_delete=models.SET(get_deleted_user),
+        limit_choices_to={'role': 'E'},
+        verbose_name='Мастер смены'
+    )
+
+    class Meta:
+        verbose_name = 'Смена'
+        verbose_name_plural = 'Смены'
+
+    def __str__(self):
+        return 'Смена ' + str(self.id)
