@@ -4,11 +4,22 @@ body{
     width: 100%;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
-a {
-    color: #da75f5;
+a {color: #da75f5}
+a:visited {color: #8c6dbd}
+h2 {margin: 0}
+h3 {margin: 0}
+button {
+    background-color: #8c6dbd00;
+    border: 0px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
-a:visited {
-    color: #8c6dbd;
+button:hover {
+    background-color: #8c6dbd4e;
+}
+button:active {
+    background-color: #8c6dbd77;
 }
 #header {
     display: flex;
@@ -23,9 +34,14 @@ a:visited {
     height: 100%;
     text-align: center;
     color: white;
-    font-size: 35px;
+    font-size: 32px;
 }
-
+#content{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+}
 #footer {
     display: flex;
     width: 100%;
@@ -36,23 +52,37 @@ a:visited {
     color: white;
     font-size: 12px;
 }
-
 #footer-title{
     font-size: 18px;
     font-weight: bold;
 }
-
-.footer-cont {
-    margin: 0 10px;
-}
+.footer-cont {margin: 0 10px}
 
 @media (max-width : 1024px) {
-
+    #title {font-size: 28px}
+    #footer {font-size: 11px}
+    #footer-title {font-size: 16px}
+    button {font-size: small;}
 }
 
-@media (max-width : 480px) {
+@media (max-width : 760px) {
     body {font-size: 14px}
     #title {font-size: 20px}
     #footer {font-size: 10px}
     #footer-title {font-size: 14px}
+    button {
+        font-size: smaller;
+        padding: 1px 3px;
+    }
+}
+
+@media (max-width : 480px) {
+    body {font-size: 12px}
+    #title {font-size: 18px}
+    #footer {font-size: 8px}
+    #footer-title {font-size: 12px}
+    button {
+        font-size: xx-small;
+        padding: 1px;
+    }
 }

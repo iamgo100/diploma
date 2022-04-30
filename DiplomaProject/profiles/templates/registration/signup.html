@@ -1,7 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %}
 {% block head %}
-    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
 {% endblock head %}
 {% block title %}Регистрация{% endblock %}
 {% block header %}Регистрация{% endblock %}
@@ -19,4 +18,7 @@
         {% endfor %}
         <button type="submit">Загеристрироваться</button>
     </form>
-    {% endblock %}
+{% endblock %}
+{% block footer %}
+{% include "base/client_footer.html" %}
+{% endblock %}

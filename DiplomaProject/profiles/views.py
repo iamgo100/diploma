@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect
+from django.utils.timezone import now
 from .forms import SignUpForm
+from .models import Shift
+import json
 
 def index(request):
     if request.user.is_authenticated:
@@ -15,7 +18,14 @@ def client(request):
     return render(request, 'client.html')
 
 def admin(request):
-    return render(request, 'admin.html')
+    shifts_calendar = json.dumps([{
+            'year': str(s.date).split('-')[0],
+            'month': str(s.date).split('-')[1], 
+            'day': str(s.date).split('-')[2], 
+            'master': s.master.user.get_full_name(),
+            'status': s.status
+            } for s in Shift.objects.all()])
+    return render(request, 'admin.html', {"shifts_calendar": shifts_calendar})
 
 def employee(request):
     return render(request, 'employee.html')

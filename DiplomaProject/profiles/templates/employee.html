@@ -1,7 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %}
 {% block head %}
-    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
 {% endblock head %}
 {% block title %}Личный кабинет{% endblock title %}
 {% block header %}Кабинет сотрудника{% endblock %}
@@ -10,6 +9,5 @@
     <p><a href="{% url 'logout' %}">Выйти из аккаунта</a></p>
 {% endblock %}
 {% block footer %}
-<div class="footer-cont"><p id="footer-title">BeautyManage</p></div>
-<div class="footer-cont"><p>Разработчик: Елкина Галина<br>gufkz.tkrbyf@yandex.ru</p></div>
+{% include "base/admin_footer.html" %}
 {% endblock %}

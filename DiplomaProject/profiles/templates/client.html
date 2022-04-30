@@ -1,11 +1,13 @@
 {% extends "base/base.html" %}
 {% load static %}
 {% block head %}
-    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
 {% endblock head %}
 {% block title %}Личный кабинет{% endblock title %}
 {% block header %}Кабинет клиента{% endblock %}
 {% block content %}
     <p>Скоро здесь будет много полезного</p>
     <p><a href="{% url 'logout' %}">Выйти из аккаунта</a></p>
+{% endblock %}
+{% block footer %}
+{% include "base/client_footer.html" %}
 {% endblock %}

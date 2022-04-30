@@ -1,15 +1,47 @@
 {% extends "base/base.html" %}
 {% load static %}
 {% block head %}
-    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+<link rel="stylesheet" href="{% static 'css/admin.css' %}" />
 {% endblock head %}
 {% block title %}Личный кабинет{% endblock title %}
 {% block header %}Кабинет администратора{% endblock %}
 {% block content %}
-    <p>Скоро здесь будет много полезного</p>
-    <p><a href="{% url 'logout' %}">Выйти из аккаунта</a></p>
+<div id="centerblock">
+<div id="shifts">
+    <table>
+        <thead>
+            <tr>
+                <td colspan="7">
+                    <div id="title-cont">
+                        <h2>Календарь смен</h2>
+                        <span>
+                            <span id="date"></span>
+                            <button id="back">﹤</button>
+                            <button id="today">Сегодня</button>
+                            <button id="next">﹥</button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="right bordered"><td>пн</td><td>вт</td><td>ср</td><td>чт</td><td>пт</td><td>сб</td><td>вс</td></tr>
+        </thead>
+        <tbody id="shiftsbody" class="bordered"></tbody>
+    </table>
+</div>
+</div>
+<div id="menu">
+    <h3>(Ужасное) Меню</h3>
+    <p>
+        <a href="{% url 'logout' %}">Выйти из аккаунта</a><br>
+        <a href="{% url 'main' %}">На главную</a><br>
+        <a href="/admin">Войти в панель администратора</a>
+    </p>
+</div>
 {% endblock %}
 {% block footer %}
-<div class="footer-cont"><p id="footer-title">BeautyManage</p></div>
-<div class="footer-cont"><p>Разработчик: Елкина Галина<br>gufkz.tkrbyf@yandex.ru</p></div>
+{% include "base/admin_footer.html" %}
+{% endblock %}
+{% block scripts %}
+{{ shifts_calendar|json_script:"shifts-calendar" }}
+<script src="{% static 'js/admin.js' %}"></script>
 {% endblock %}

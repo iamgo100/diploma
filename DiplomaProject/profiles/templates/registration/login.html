@@ -1,7 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %}
 {% block head %}
-    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
 {% endblock head %}
 {% block title %}Вход на сайт{% endblock %}
 {% block header %}Вход на сайт{% endblock %}
@@ -11,4 +10,7 @@
         {{ form.as_p }}
         <button type="submit">Войти</button>
     </form>
+{% endblock %}
+{% block footer %}
+{% include "base/client_footer.html" %}
 {% endblock %}
