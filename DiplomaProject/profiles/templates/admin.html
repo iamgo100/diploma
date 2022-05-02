@@ -2,40 +2,22 @@
 {% load static %}
 {% block head %}
 <link rel="stylesheet" href="{% static 'css/admin.css' %}" />
+<link rel="stylesheet" href="{% static 'css/calendar.css' %}" />
 {% endblock head %}
 {% block title %}Личный кабинет{% endblock title %}
 {% block header %}Кабинет администратора{% endblock %}
 {% block content %}
 <div id="centerblock">
-<div id="shifts">
-    <table>
-        <thead>
-            <tr>
-                <td colspan="7">
-                    <div id="title-cont">
-                        <h2>Календарь смен</h2>
-                        <span>
-                            <span id="date"></span>
-                            <button id="back">﹤</button>
-                            <button id="today">Сегодня</button>
-                            <button id="next">﹥</button>
-                        </span>
-                    </div>
-                </td>
-            </tr>
-            <tr class="right bordered"><td>пн</td><td>вт</td><td>ср</td><td>чт</td><td>пт</td><td>сб</td><td>вс</td></tr>
-        </thead>
-        <tbody id="shiftsbody" class="bordered"></tbody>
-    </table>
-</div>
+<div id="shifts">{% include "base/calendar.html" %}</div>
+<div id="appointments">{% include "base/calendar.html" %}</div>
 </div>
 <div id="menu">
     <h3>(Ужасное) Меню</h3>
-    <p>
-        <a href="{% url 'logout' %}">Выйти из аккаунта</a><br>
-        <a href="{% url 'main' %}">На главную</a><br>
-        <a href="/admin">Войти в панель администратора</a>
-    </p>
+    <ul>
+        <li><a href="{% url 'logout' %}">Выйти из аккаунта</a></li>
+        <li><a href="{% url 'main' %}">На главную</a></li>
+        <li><a href="/admin">Войти в панель администратора</a></li>
+    </ul>
 </div>
 {% endblock %}
 {% block footer %}
@@ -43,5 +25,6 @@
 {% endblock %}
 {% block scripts %}
 {{ shifts_calendar|json_script:"shifts-calendar" }}
+<script src="{% static 'js/calendar.js' %}"></script>
 <script src="{% static 'js/admin.js' %}"></script>
 {% endblock %}

@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.utils.timezone import now
 from .forms import SignUpForm
 from .models import Shift
 import json
@@ -15,20 +14,26 @@ def index(request):
     return render(request, 'profile.html')
 
 def client(request):
-    return render(request, 'client.html')
+    if request.user.profile.role == 'C':
+        return render(request, 'client.html')
+    return render(request, 'profile.html')
 
 def admin(request):
-    shifts_calendar = json.dumps([{
-            'year': str(s.date).split('-')[0],
-            'month': str(s.date).split('-')[1], 
-            'day': str(s.date).split('-')[2], 
-            'master': s.master.user.get_full_name(),
-            'status': s.status
-            } for s in Shift.objects.all()])
-    return render(request, 'admin.html', {"shifts_calendar": shifts_calendar})
+    if request.user.profile.role == 'A':
+        shifts_calendar = json.dumps([{
+                'year': str(s.date).split('-')[0],
+                'month': str(s.date).split('-')[1], 
+                'day': str(s.date).split('-')[2], 
+                'master': s.master.user.get_full_name(),
+                'status': s.status
+                } for s in Shift.objects.all()])
+        return render(request, 'admin.html', {"shifts_calendar": shifts_calendar})
+    return render(request, 'profile.html')
 
 def employee(request):
-    return render(request, 'employee.html')
+    if request.user.profile.role == 'E':
+        return render(request, 'employee.html')
+    return render(request, 'profile.html')
 
 def signup(request):
     if request.method == 'POST':

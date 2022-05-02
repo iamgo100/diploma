@@ -1,8 +1,8 @@
 from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
 from django.contrib.auth import get_user_model
 from django.utils.timezone import now
 
@@ -28,11 +28,11 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.get_full_name()
 
-@receiver(post_save, sender=User)
-def update_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-    instance.profile.save()
+# @receiver(post_save, sender=User)
+# def update_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         Profile.objects.create(user=instance)
+#     instance.profile.save()
 
 def get_deleted_user():
     return get_user_model().objects.get_or_create(username='deleted')[0]
