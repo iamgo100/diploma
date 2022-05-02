@@ -13,7 +13,7 @@ class UserAdmin(UserAdmin):
     inlines = (UserInline, )
 
 class ShiftAdmin(admin.ModelAdmin):
-    fields = ['date', 'master']
+    fields = ['date', 'master', 'room']
     list_display = ('date', 'master', 'status')
 
 admin.site.unregister(User)

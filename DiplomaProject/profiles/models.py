@@ -52,6 +52,15 @@ class Shift(models.Model):
         ],
         default='N'
     )
+    room = models.CharField(
+        verbose_name='Зал смены',
+        max_length=1,
+        choices=[
+            ('1', 'Парикмахерский'),
+            ('2', 'Маникюрный')
+        ],
+        default='1'
+    )
     master = models.ForeignKey(
         Profile,
         on_delete=models.SET(get_deleted_user),

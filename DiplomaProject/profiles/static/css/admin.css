@@ -20,12 +20,22 @@
     padding: 3px;
     border-radius: 15px;
     text-align: center;
+    overflow: hidden;
 }
 .unconfirmed {
     background-color: #f575757f;
 }
 .confirmed {
     background-color: #a4f5757f;
+}
+.room {
+    display: block;
+    margin: 1px;
+    padding: 2px;
+    border-radius: 15px;
+    background-color: #ffffffdf;
+    overflow: hidden;
+    font-size: smaller;
 }
 #menu {
     min-width: 25%;
