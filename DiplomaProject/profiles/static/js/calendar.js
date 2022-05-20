@@ -45,7 +45,7 @@ const renderCalendar = ({month: startMonth, year: startYear}, somethingelse) => 
 }
 
 // создание рендера календаря и его навигации
-const createCalendar = (calendarNode, title='Календарь', somethingelse=(...args)=>{return ''}) => {
+export const createCalendar = (calendarNode, title='Календарь', somethingelse=(...args)=>{return ''}) => {
     const calendarBody = calendarNode.querySelector('tbody');
     const calendarBtns = calendarNode.querySelectorAll('button');
     const dateText = calendarNode.querySelector('span').querySelector('span');

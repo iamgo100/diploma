@@ -2,11 +2,11 @@
 {% load static %}
 {% block head %}
 <link rel="stylesheet" href="{% static 'css/admin.css' %}" />
-<link rel="stylesheet" href="{% static 'css/calendar.css' %}" />
 {% endblock head %}
 {% block title %}Личный кабинет{% endblock title %}
 {% block header %}Кабинет администратора{% endblock %}
 {% block content %}
+<div id="shift-modal" class="showed wrapper-modal">{% include "base/modal.html" %}</div>
 <div id="centerblock">
 <div id="shifts">{% include "base/calendar.html" %}</div>
 <div id="appointments">{% include "base/calendar.html" %}</div>
@@ -25,6 +25,5 @@
 {% endblock %}
 {% block scripts %}
 {{ shifts_calendar|json_script:"shifts-calendar" }}
-<script src="{% static 'js/calendar.js' %}"></script>
-<script src="{% static 'js/admin.js' %}"></script>
+<script type="module" src="{% static 'js/admin.js' %}"></script>
 {% endblock %}

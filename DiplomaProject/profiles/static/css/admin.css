@@ -1,3 +1,5 @@
+@import "./calendar.css";
+@import "./modal.css";
 #content{
     display: flex;
     justify-content: space-between;
@@ -21,6 +23,7 @@
     border-radius: 15px;
     text-align: center;
     overflow: hidden;
+    cursor: pointer;
 }
 .unconfirmed {
     background-color: #f575757f;
@@ -46,6 +49,7 @@
     list-style: none;
     padding-left: 0;
 }
+#menu h3 {margin: 0}
 
 @media (max-width : 1024px) {
 }

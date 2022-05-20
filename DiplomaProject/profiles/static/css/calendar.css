@@ -22,6 +22,7 @@
     align-items: center;
     width: 100%;
 }
+.calendar h2 {margin: 0}
 .calendar {
     width: 100%;
     border-spacing: 0;

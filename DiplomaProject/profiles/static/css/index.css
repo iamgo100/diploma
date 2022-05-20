@@ -6,8 +6,6 @@ body{
 }
 a {color: #da75f5}
 a:visited {color: #8c6dbd}
-h2 {margin: 0}
-h3 {margin: 0}
 #header {
     display: flex;
     width: 100%;
