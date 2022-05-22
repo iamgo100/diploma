@@ -15,13 +15,7 @@ const renderShifts = (day) => {
         } else {
             code = code + '<span class="master confirmed"';
         };
-        code = code + ` data-id="${el.id}">${el.master}<span class="room">`;
-        if (el.room === '1'){
-            code = code + 'Парикмахерский';
-        } else {
-            code = code + 'Маникюрный';
-        };
-        code = code + '</span></span>';
+        code = code + ` data-id="${el.id}">${el.master}<span class="room">${el.room}</span></span>`;
     });
     return code;
 };

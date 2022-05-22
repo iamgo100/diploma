@@ -1,0 +1,16 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block head %}
+{% endblock head %}
+{% block title %}Личный кабинет{% endblock title %}
+{% block header %}Личный кабинет{% endblock %}
+{% block content %}
+    <h1>Здесь скоро будет ваш профиль</h1>
+{% endblock %}
+{% block footer %}
+{% if user.profile.role == "C" %}
+    {% include "base/client_footer.html" %}
+{% else %}
+    {% include "base/admin_footer.html" %}
+{% endif %}
+{% endblock %}

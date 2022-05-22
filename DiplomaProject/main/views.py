@@ -3,6 +3,8 @@ from .forms import ProfileForm, SignUpForm
 from .models import Profile
 
 def index(request):
+    if request.user.is_authenticated:
+        return redirect('office')
     return render(request, 'index.html')
 
 def signup(request):

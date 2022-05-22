@@ -10,15 +10,15 @@ def index(request):
             return redirect('employee')
         elif request.user.profile.role == 'C':
             return redirect('client')
-    return render(request, 'profile.html')
+    return redirect('main')
 
 def client(request):
-    if request.user.profile.role == 'C':
+    if request.user.is_authenticated and request.user.profile.role == 'C':
         return render(request, 'client.html')
-    return render(request, 'profile.html')
+    return redirect('office')
 
 def admin(request):
-    if request.user.profile.role == 'A':
+    if request.user.is_authenticated and request.user.profile.role == 'A':
         shifts_calendar = json.dumps([{
             'id': s.id,
             'year': str(s.date).split('-')[0],
@@ -26,12 +26,17 @@ def admin(request):
             'day': str(s.date).split('-')[2], 
             'master': s.master.user.get_full_name(),
             'status': s.status,
-            'room': s.room
+            'room': s.get_room(s.room)
             } for s in Shift.objects.all()])
         return render(request, 'admin.html', {"shifts_calendar": shifts_calendar})
-    return render(request, 'profile.html')
+    return redirect('office')
 
 def employee(request):
-    if request.user.profile.role == 'E':
+    if request.user.is_authenticated and request.user.profile.role == 'E':
         return render(request, 'employee.html')
-    return render(request, 'profile.html')
+    return redirect('office')
+
+def profile(request):
+    if request.user.is_authenticated and request.user.is_authenticated:
+        return render(request, 'profile.html')
+    return redirect('main')

@@ -43,3 +43,9 @@ class Shift(models.Model):
 
     def __str__(self):
         return 'Смена ' + str(self.id)
+    
+    def get_room(self, room):
+        if room == '1':
+            return 'Парикмахерский'
+        elif room == '2':
+            return 'Маникюрный'

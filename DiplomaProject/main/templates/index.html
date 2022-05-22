@@ -6,6 +6,6 @@
 {% block title %}Главная{% endblock title %}
 {% block header %}Добро пожаловать в BeautyManage!{% endblock %}
 {% block content %}
-    <p><a href="/accounts/login/">Войти</a></p>
-    <p><a href="/accounts/signup/">Зарегистрироваться</a></p>
+    <p><a href="{% url 'login' %}">Войти</a></p>
+    <p><a href="{% url 'signup' %}">Зарегистрироваться</a></p>
 {% endblock %}
