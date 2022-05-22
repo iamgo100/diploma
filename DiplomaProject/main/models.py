@@ -13,7 +13,10 @@ class Profile(models.Model):
         choices=[('C', 'клиент'), ('E', 'сотрудник'), ('A', 'администратор')],
         default='C'
     )
-    phone_regex = RegexValidator(regex = r'^\+?7?\d{9,10}$', message = "Номер телефона необходимо вводить в формате: '+79991234567'.")
+    phone_regex = RegexValidator(
+        regex = r'^\+?7?\d{9,10}$',
+        message = "Номер телефона необходимо вводить в формате: '+79991234567'."
+    )
     phone_number = models.CharField(
         verbose_name='Телефон',
         max_length=12,
