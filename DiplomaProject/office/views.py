@@ -10,7 +10,7 @@ def index(request):
             return redirect('employee')
         elif request.user.profile.role == 'C':
             return redirect('client')
-    return redirect('main')
+    return redirect('login')
 
 def client(request):
     if request.user.is_authenticated and request.user.profile.role == 'C':
@@ -35,8 +35,3 @@ def employee(request):
     if request.user.is_authenticated and request.user.profile.role == 'E':
         return render(request, 'employee.html')
     return redirect('office')
-
-def profile(request):
-    if request.user.is_authenticated and request.user.is_authenticated:
-        return render(request, 'profile.html')
-    return redirect('main')

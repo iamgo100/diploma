@@ -49,3 +49,13 @@ class Shift(models.Model):
             return 'Парикмахерский'
         elif room == '2':
             return 'Маникюрный'
+
+class Appointment(models.Model):
+    id = models.AutoField(primary_key=True)
+
+    class Meta:
+        verbose_name = 'Запись'
+        verbose_name_plural = 'Записи'
+
+    def __str__(self):
+        return 'Запись ' + str(self.id)

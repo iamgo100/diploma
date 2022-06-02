@@ -1,7 +1,5 @@
 {% extends "base/base.html" %}
 {% load static %}
-{% block head %}
-{% endblock head %}
 {% block title %}Вход на сайт{% endblock %}
 {% block header %}Вход на сайт{% endblock %}
 {% block content %}
@@ -10,6 +8,7 @@
         {{ form.as_p }}
         <button type="submit">Войти</button>
     </form>
+    <p>Нет аккаунта? <a href="{% url 'signup' %}">Зарегистрироваться</a></p>
 {% endblock %}
 {% block footer %}
 {% include "base/client_footer.html" %}

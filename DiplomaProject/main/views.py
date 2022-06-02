@@ -5,7 +5,8 @@ from .models import Profile
 def index(request):
     if request.user.is_authenticated:
         return redirect('office')
-    return render(request, 'index.html')
+    return redirect('login')
+    # return render(request, 'index.html')
 
 def signup(request):
     if request.method == 'POST':
@@ -25,3 +26,8 @@ def signup(request):
         user_form = SignUpForm()
         profile_form = ProfileForm()
     return render(request, 'registration/signup.html', {'user_form': user_form, 'profile_form': profile_form})
+
+def profile(request):
+    if request.user.is_authenticated:
+        return render(request, 'profile.html')
+    return redirect('main')
