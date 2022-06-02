@@ -1,15 +1,32 @@
-.calendar-btn {
-    background-color: #8c6dbd00;
+.calendar button {
     border: 0px;
-    border-radius: 3px;
     cursor: pointer;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.calendar-btn {
+    background-color: #8c6dbd00;
+    border-radius: 3px;
 }
 .calendar-btn:hover {
     background-color: #8c6dbd4e;
 }
 .calendar-btn:active {
     background-color: #8c6dbd77;
+}
+.plus {
+    padding: 2px;
+    width: 20px;
+    font-size: small;
+    border-radius: 5px;
+    background-color: #e7e7e777;
+    color: #c8c8c8;
+}
+.plus:hover {
+    background-color: #da75f54e;
+    color: #666;
+}
+.plus:active {
+    background-color: #da75f577;
 }
 .date {
     font-size: small;
@@ -47,7 +64,7 @@
 .wrapper{
     display: flex;
     width: 100%;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 .day {
     margin: 2px;

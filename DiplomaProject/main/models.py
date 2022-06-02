@@ -2,6 +2,16 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
 
+def get_user_by_phone(phone):
+    profile = Profile.objects.get(phone_number=phone)
+    if not profile:
+        user = User.objects.create(username=phone, first_name=phone)
+        user.save()
+        user.refresh_from_db()
+        profile = Profile.objects.create(user=user, phone_number=phone)
+        profile.save()
+    return profile
+
 class Profile(models.Model):
     user = models.OneToOneField(
         User,

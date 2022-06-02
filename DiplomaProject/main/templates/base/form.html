@@ -1,0 +1,6 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block head %}<link rel="stylesheet" href="{% static 'css/forms.css' %}"/>{% endblock %}
+{% block content %}
+    <div class="form">{% block form-content %}{% endblock %}</div>
+{% endblock %}

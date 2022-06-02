@@ -1,27 +1,13 @@
-{% extends "base/base.html" %}
+{% extends "base/form.html" %}
 {% load static %}
 {% block title %}Регистрация{% endblock %}
 {% block header %}Регистрация{% endblock %}
-{% block content %}
+{% block form-content %}
     <form method="post">
         {% csrf_token %}
-        <div>
-            {% for field in user_form %}
-            <p>{{ field.label_tag }}<br>
-                {{ field }}<br>
-                {% if field.help_text %} <small>{{ field.help_text }}</small> {% endif %}
-                {% for error in field.errors %} <br><small style="color: red;">{{ error }}</small> {% endfor %}
-            </p>
-            {% endfor %}
-            {% for field in profile_form %}
-            <p>{{ field.label_tag }}<br>
-                {{ field }}<br>
-                {% if field.help_text %} <small>{{ field.help_text }}</small> {% endif %}
-                {% for error in field.errors %} <br><small style="color: red;">{{ error }}</small> {% endfor %}
-            </p>
-            {% endfor %}
-        </div>
-        <button type="submit">Загеристрироваться</button>
+        {{ user_form.as_p }}
+        {{ profile_form.as_p }}
+        <p class="btn-cont"><button type="submit">Загеристрироваться</button></p>
     </form>
 {% endblock %}
 {% block footer %}

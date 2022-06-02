@@ -7,13 +7,13 @@ const getRenderDate = (date) => {
 
 // отрисовка дня календаря
 const renderDay = (day, today, startMonth) => {
-    let code = '';
+    let code = '<div class="wrapper"><button class="plus">+</button>';
     if (day.getDate() === today.day && day.getMonth() === today.month && day.getFullYear() === today.year){
-        code = code + '<div class="wrapper"><span class="today day">';
+        code = code + '<span class="today day">';
     } else if (day.getMonth() !== startMonth) {
-        code = code + '<div class="wrapper"><span class="notthismonth day">';
+        code = code + '<span class="notthismonth day">';
     } else {
-        code = code + '<div class="wrapper"><span class="day">';
+        code = code + '<span class="day">';
     };
     code = code + day.getDate() + '</span></div>';
     return code;
@@ -44,6 +44,8 @@ const renderCalendar = ({month: startMonth, year: startYear}, somethingelse) => 
     return code;
 }
 
+export let renderDate = getRenderDate(new Date());
+
 // создание рендера календаря и его навигации
 export const createCalendar = (calendarNode, title='Календарь', somethingelse=(...args)=>{return ''}) => {
     const calendarBody = calendarNode.querySelector('tbody');
@@ -52,7 +54,6 @@ export const createCalendar = (calendarNode, title='Календарь', somethi
 
     calendarNode.querySelector('h2').textContent = title;
 
-    let renderDate = getRenderDate(new Date());
     dateText.textContent = months[renderDate.month] + " " + renderDate.year;
     calendarBody.innerHTML = renderCalendar(renderDate, somethingelse);
 

@@ -1,5 +1,6 @@
+from msilib.schema import Error
 from django.shortcuts import render, redirect
-from .models import Shift
+from .models import Appointment, Shift
 import json
 
 def index(request):
@@ -21,14 +22,20 @@ def admin(request):
     if request.user.is_authenticated and request.user.profile.role == 'A':
         shifts_calendar = json.dumps([{
             'id': s.id,
-            'year': str(s.date).split('-')[0],
-            'month': str(s.date).split('-')[1], 
-            'day': str(s.date).split('-')[2], 
+            'date': str(s.date).split('-'), 
             'master': s.master.user.get_full_name(),
             'status': s.status,
             'room': s.get_room(s.room)
             } for s in Shift.objects.all()])
-        return render(request, 'admin.html', {"shifts_calendar": shifts_calendar})
+        appointments_calendar = json.dumps([{
+            'id': a.id, 
+            'client': a.client.user.first_name,
+            'date': str(a.date).split('-'),
+            'time': str(a.time).split(':'),
+            'service': str(a.service),
+            'shift': str(a.shift)
+            } for a in Appointment.objects.all()])
+        return render(request, 'admin.html', {"shifts_calendar": shifts_calendar, "appointments_calendar": appointments_calendar})
     return redirect('office')
 
 def employee(request):

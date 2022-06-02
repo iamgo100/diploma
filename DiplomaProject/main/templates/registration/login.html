@@ -1,12 +1,12 @@
-{% extends "base/base.html" %}
+{% extends "base/form.html" %}
 {% load static %}
 {% block title %}Вход на сайт{% endblock %}
 {% block header %}Вход на сайт{% endblock %}
-{% block content %}
+{% block form-content %}
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Войти</button>
+        <p class="btn-cont"><button type="submit">Войти</button></p>
     </form>
     <p>Нет аккаунта? <a href="{% url 'signup' %}">Зарегистрироваться</a></p>
 {% endblock %}

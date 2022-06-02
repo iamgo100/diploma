@@ -25,5 +25,6 @@
 {% endblock %}
 {% block scripts %}
 {{ shifts_calendar|json_script:"shifts-calendar" }}
+{{ appointments_calendar|json_script:"appointments-calendar" }}
 <script type="module" src="{% static 'js/admin.js' %}"></script>
 {% endblock %}
