@@ -1,74 +1,23 @@
 @import "./calendar.css";
 @import "./modal.css";
-#content{
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    width: 100%;
-}
-#centerblock{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
-}
 #shifts {width: 90%;}
 #appointments {
     width: 90%;
     margin-top: 20px;
 }
-.centered-cont{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    margin: 2px;
-    padding: 3px;
-    border-radius: 15px;
-    cursor: pointer;
+#menu ul .with-padding {
+    list-style: circle;
+    padding-left: 20px;
 }
-.inline-cont {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 90%;
-}
-.unconfirmed {
-    background-color: #f575757f;
-}
-.confirmed {
-    background-color: #a4f5757f;
-}
-.name {
-    text-align: center;
-    color: #222;
+.ul-header {
+    margin: 5px 0px;
     font-weight: bold;
 }
-.property {
-    margin: 1px;
-    padding: 2px;
-    border-radius: 15px;
-    background-color: #ffffffb7;
-    overflow: hidden;
-    font-size: smaller;
-    text-align: center;
-    color: #333;
-}
-#menu {
-    min-width: 25%;
-    margin: 0 10px;
-    font-size: small;
-}
-#menu ul {
-    list-style: none;
-    padding-left: 0;
-}
-#menu h3 {margin: 0}
 
 @media (max-width : 1024px) {
 }
 
 @media (max-width : 760px) {
-    #menu {display: none}
 }
 
 @media (max-width : 480px) {

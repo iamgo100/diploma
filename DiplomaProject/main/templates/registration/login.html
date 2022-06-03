@@ -8,7 +8,7 @@
         {{ form.as_p }}
         <p class="btn-cont"><button type="submit">Войти</button></p>
     </form>
-    <p>Нет аккаунта? <a href="{% url 'signup' %}">Зарегистрироваться</a></p>
+    <p>Нет аккаунта? <a href="{% url 'signup' role='C' %}">Зарегистрироваться</a></p>
 {% endblock %}
 {% block footer %}
 {% include "base/client_footer.html" %}

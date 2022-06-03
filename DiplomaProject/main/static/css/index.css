@@ -4,7 +4,11 @@ body{
     width: 100%;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
-a {color: #da75f5}
+a {
+    color: #da75f5;
+    text-decoration: none;
+}
+a:hover {text-decoration: underline;}
 a:visited {color: #8c6dbd}
 #header {
     display: flex;
@@ -21,6 +25,12 @@ a:visited {color: #8c6dbd}
     color: white;
     font-size: 32px;
 }
+#content{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+}
 #footer {
     display: flex;
     width: 100%;
@@ -36,6 +46,22 @@ a:visited {color: #8c6dbd}
     font-weight: bold;
 }
 .footer-cont {margin: 0 10px}
+.centerblock{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+#menu {
+    min-width: 25%;
+    margin: 0 10px;
+    font-size: small;
+}
+#menu ul {
+    list-style: none;
+    padding-left: 0;
+}
+#menu h3 {margin: 0}
 
 @media (max-width : 1024px) {
     #title {font-size: 28px}
@@ -48,6 +74,7 @@ a:visited {color: #8c6dbd}
     #title {font-size: 20px}
     #footer {font-size: 10px}
     #footer-title {font-size: 14px}
+    #menu {display: none}
 }
 
 @media (max-width : 480px) {

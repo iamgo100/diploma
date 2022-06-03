@@ -8,7 +8,7 @@ def index(request):
     return redirect('login')
     # return render(request, 'index.html')
 
-def signup(request):
+def signup(request, role='C'):
     if request.method == 'POST':
         user_form = SignUpForm(request.POST)
         profile_form = ProfileForm(request.POST)
@@ -19,8 +19,10 @@ def signup(request):
             user.save()
             user.refresh_from_db()
             phone = profile_form.cleaned_data.get('phone_number')
-            profile = Profile.objects.create(user=user, phone_number=phone)
+            profile = Profile.objects.create(user=user, phone_number=phone, role=role)
             profile.save()
+            if request.user.is_authenticated:
+                return redirect('office')
             return redirect('login')
     else:
         user_form = SignUpForm()

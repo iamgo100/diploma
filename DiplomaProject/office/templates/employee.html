@@ -1,13 +1,29 @@
 {% extends "base/base.html" %}
 {% load static %}
 {% block head %}
+<link rel="stylesheet" href="{% static 'css/employee.css' %}" />
 {% endblock head %}
 {% block title %}Личный кабинет{% endblock title %}
 {% block header %}Кабинет сотрудника{% endblock %}
 {% block content %}
-    <p>Скоро здесь будет много полезного</p>
-    <p><a href="{% url 'logout' %}">Выйти из аккаунта</a></p>
+<div class="centerblock">
+    {% csrf_token %}
+    <div id="unconfirmed-shifts"></div>
+    <div id="shifts"></div>
+    <div id="appointments"></div>
+    </div>
+    <div id="menu">
+        <h3>Меню</h3>
+        <ul>
+            <li><a href="{% url 'logout' %}">Выйти из аккаунта</a></li>
+            <li><a href="{% url 'profile' %}">Мой профиль</a></li>
+            <li><a href="{% url 'signup' role='C' %}">Регистрация клиента</a></li>
+        </ul>
+    </div>
 {% endblock %}
 {% block footer %}
 {% include "base/admin_footer.html" %}
+{% endblock %}
+{% block scripts %}
+<script type="module" src="{% static 'js/employee.js' %}"></script>
 {% endblock %}

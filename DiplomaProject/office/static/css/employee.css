@@ -1,0 +1,58 @@
+@import "./calendar.css";
+#shifts {width: 90%;}
+#appointments {
+    width: 90%;
+    margin-top: 20px;
+}
+.shift{
+    margin: 2px;
+    padding: 3px;
+    border-radius: 15px;
+    cursor: pointer;
+    text-align: center;
+    color: #222;
+    overflow: hidden;
+}
+#appointments .plus {display: none;}
+#appointments .wrapper {
+    justify-content: flex-end;
+}
+#unconfirmed-shifts {width: 90%;}
+#unconfirmed-shifts ul {padding-left: 0px;}
+#unconfirmed-shifts li {
+    margin: 5px 0px;
+    display: flex;
+    flex-direction: row;
+}
+.list-symbol {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.confirm {
+    border: 0px;
+    cursor: pointer;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: #8c6dbd;
+    color: #fff;
+    border-radius: 3px;
+    padding: 7px;
+    margin-left: 10px;
+}
+.confirm:hover {
+    background-color: #8c6dbd77;
+}
+.confirm:active {
+    background-color: #8c6dbd;
+}
+
+@media (max-width : 1024px) {
+    .confirm {font-size: small;}
+}
+
+@media (max-width : 760px) {
+    .confirm {font-size: smaller;}
+}
+
+@media (max-width : 480px) {
+    .confirm {font-size: x-small;}
+}

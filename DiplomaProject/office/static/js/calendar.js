@@ -47,12 +47,27 @@ const renderCalendar = ({month: startMonth, year: startYear}, somethingelse) => 
 export let renderDate = getRenderDate(new Date());
 
 // создание рендера календаря и его навигации
-export const createCalendar = (calendarNode, title='Календарь', somethingelse=(...args)=>{return ''}) => {
+export const createCalendar = (calendarNode, title='Календарь', renderDate=renderDate, somethingelse=(...args)=>{return ''}) => {
+    calendarNode.innerHTML = `
+    <table class="calendar">
+    <thead>
+        <tr><td colspan="7"><div class="calendar-title-cont">
+                    <h2>${title}</h2>
+                    <span>
+                        <span class="date"></span>
+                        <button class="calendar-btn">﹤</button>
+                        <button class="calendar-btn">Сегодня</button>
+                        <button class="calendar-btn">﹥</button>
+                    </span>
+        </div></td></tr>
+        <tr class="right bordered"><td>пн</td><td>вт</td><td>ср</td><td>чт</td><td>пт</td><td>сб</td><td>вс</td></tr>
+    </thead>
+    <tbody class="bordered"></tbody>
+    </table>
+    `;
     const calendarBody = calendarNode.querySelector('tbody');
     const calendarBtns = calendarNode.querySelectorAll('button');
     const dateText = calendarNode.querySelector('span').querySelector('span');
-
-    calendarNode.querySelector('h2').textContent = title;
 
     dateText.textContent = months[renderDate.month] + " " + renderDate.year;
     calendarBody.innerHTML = renderCalendar(renderDate, somethingelse);

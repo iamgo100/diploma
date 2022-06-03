@@ -77,6 +77,41 @@
     background-color: #da75f53f;
     font-weight: bold;
 }
+.name {
+    text-align: center;
+    color: #222;
+    font-weight: bold;
+}
+.property {
+    margin: 1px;
+    padding: 2px;
+    border-radius: 15px;
+    background-color: #ffffffb7;
+    overflow: hidden;
+    font-size: smaller;
+    text-align: center;
+    color: #333;
+}
+.inline-cont {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+}
+.centered-cont{
+    display: flex;
+    flex-direction: column;
+    margin: 2px;
+    padding: 3px;
+    border-radius: 15px;
+    cursor: pointer;
+}
+.unconfirmed {
+    background-color: #f575757f;
+}
+.confirmed {
+    background-color: #da75f533;
+}
 
 @media (max-width : 1024px) {
     .bordered td{font-size: 14px}
