@@ -7,10 +7,10 @@
 .form *:focus {
     outline:none !important;
 }
-.form input {
+.form input, select {
     border: 2px solid #8c6dbd77;
 }
-.form input:focus-visible {
+.form input, select:focus-visible {
     border-color:#8c6dbd;
 }
 .form button[type='submit'] {

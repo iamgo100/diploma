@@ -6,11 +6,11 @@
 {% block title %}Личный кабинет{% endblock title %}
 {% block header %}Кабинет сотрудника{% endblock %}
 {% block content %}
-<div class="centerblock">
+    <div class="centerblock">
     {% csrf_token %}
-    <div id="unconfirmed-shifts"></div>
-    <div id="shifts"></div>
-    <div id="appointments"></div>
+        <div id="unconfirmed-shifts"></div>
+        <div id="shifts"></div>
+        <div id="appointments"></div>
     </div>
     <div id="menu">
         <h3>Меню</h3>

@@ -91,7 +91,7 @@ class Appointment(models.Model):
         verbose_name='Услуга',
         null=True
     )
-    date = models.DateField('Дата')
+    date = models.DateField('Дата', help_text='Введите дату в формате: 01.01.2001')
     time = models.TimeField('Время')
     shift = models.ForeignKey(
         Shift,

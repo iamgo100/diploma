@@ -1,0 +1,17 @@
+.hidden {display: none;}
+.cost-text {margin-left: 10px;}
+#sub {
+    border: 0px;
+    cursor: pointer;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: #8c6dbd;
+    color: #fff;
+    border-radius: 3px;
+    padding: 7px;
+}
+#sub:hover {
+    background-color: #8c6dbd77;
+}
+#sub:active {
+    background-color: #8c6dbd;
+}

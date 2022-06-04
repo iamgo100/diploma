@@ -9,7 +9,7 @@ class ServicetAdmin(admin.ModelAdmin):
     list_display = ('service_name', 'cost', 'duration', 'room')
 
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = ('service', 'client', 'shift')
+    list_display = ('service', 'client', 'date', 'time', 'shift')
 
 admin.site.register(Shift, ShiftAdmin)
 admin.site.register(Service, ServicetAdmin)

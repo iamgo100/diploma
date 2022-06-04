@@ -9,11 +9,11 @@ export const renderAppointments = (day) => {
     let requiredAppointments = appointments.filter(el => day.getDate() == el.date[2] && day.getMonth() == el.date[1]-1 && day.getFullYear() == el.date[0]);
     requiredAppointments.forEach(el => {
         if (el.shift === 'None') {
-            code = code + '<div class="appointment centered-cont unconfirmed"'
+            code += '<div class="appointment centered-cont unconfirmed"'
         } else {
-            code = code + '<div class="appointment centered-cont confirmed"'
+            code += '<div class="appointment centered-cont confirmed"'
         };
-        code = code + ` data-id="${el.id}">
+        code += ` data-id="${el.id}">
         <div class="inline-cont">
             <span class="property">${el.time[0]}:${el.time[1]}</span>
             <span class="name">${el.client}</span>

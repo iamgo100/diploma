@@ -9,13 +9,13 @@ const getRenderDate = (date) => {
 const renderDay = (day, today, startMonth) => {
     let code = '<div class="wrapper"><button class="plus">+</button>';
     if (day.getDate() === today.day && day.getMonth() === today.month && day.getFullYear() === today.year){
-        code = code + '<span class="today day">';
+        code += '<span class="today day">';
     } else if (day.getMonth() !== startMonth) {
-        code = code + '<span class="notthismonth day">';
+        code += '<span class="notthismonth day">';
     } else {
-        code = code + '<span class="day">';
+        code += '<span class="day">';
     };
-    code = code + day.getDate() + '</span></div>';
+    code += day.getDate() + '</span></div>';
     return code;
 }
 
@@ -26,20 +26,20 @@ const renderCalendar = ({month: startMonth, year: startYear}, somethingelse) => 
     let day = new Date(startYear, startMonth, 1-wday);
     let code = '';
     for (let i = 0; i < 5; i++) {
-        code = code + '<tr>';
+        code += '<tr>';
         for (let j = 0; j < 7; j++){
-            code = code + '<td><div class="cell">' + renderDay(day, today, startMonth) + somethingelse(day) + '</div></td>';
+            code += '<td><div class="cell">' + renderDay(day, today, startMonth) + somethingelse(day) + '</div></td>';
             day = new Date(day.getFullYear(), day.getMonth(), day.getDate()+1);
         };
-        code = code + '</tr>';
+        code += '</tr>';
     };
     if (day.getMonth() === startMonth && day.getDate() < new Date(day.getFullYear(), day.getMonth()+1, 0).getDate()) {
-        code = code + '<tr>';
+        code += '<tr>';
         for (let j = 0; j < 7; j++){
-            code = code + '<td><div class="cell">' + renderDay(day, today, startMonth) + somethingelse(day) + '</div></td>';
+            code += '<td><div class="cell">' + renderDay(day, today, startMonth) + somethingelse(day) + '</div></td>';
             day = new Date(day.getFullYear(), day.getMonth(), day.getDate()+1);
         };
-        code = code + '</tr>';
+        code += '</tr>';
     };
     return code;
 }

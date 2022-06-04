@@ -10,11 +10,11 @@ const renderShifts = (day) => {
     let requiredShifts = shifts.filter(el => day.getDate() == el.date[2] && day.getMonth() == el.date[1]-1 && day.getFullYear() == el.date[0]);
     requiredShifts.forEach(el => {
         if (el.status === 'N'){
-            code = code + '<div class="master centered-cont unconfirmed"';
+            code += '<div class="master centered-cont unconfirmed"';
         } else {
-            code = code + '<div class="master centered-cont confirmed"';
+            code += '<div class="master centered-cont confirmed"';
         };
-        code = code + ` data-id="${el.id}"><span class="name">${el.master}</span><span class="property">${el.room}</span></div>`;
+        code += ` data-id="${el.id}"><span class="name">${el.master}</span><span class="property">${el.room}</span></div>`;
     });
     return code;
 };

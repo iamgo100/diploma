@@ -8,11 +8,11 @@ const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
 // отрисовка списка непринятых смен
 const renderUnconfirmedShifts = async () => {
-    const unconfirmedShifts = await fetch('/office/get/shifts/unconfirmed/').then(res => res.json());
+    const unconfirmedShifts = await fetch('/office/get/shifts/N/').then(res => res.json());
     if (unconfirmedShifts.length !== 0) {
         let code = '';
         unconfirmedShifts.forEach(el => {
-            code = code + `<li data-id="${el.id}"><span class="list-symbol">•</span><span>Смена от ${el.date} в зале "${el.room}"</span><button class="confirm">Принять</button></li>`;
+            code += `<li data-id="${el.id}"><span class="list-symbol">•</span><span>Смена от ${el.date[0]}-${el.date[1]}-${el.date[2]} в зале "${el.room}"</span><button class="confirm">Принять</button></li>`;
         });
         unconfirmedShiftsList.innerHTML = `<h3>Список непринятых смен</h3><ul>${code}</ul>`;
     }
@@ -23,19 +23,14 @@ const renderShifts = (day) => {
     let code = '';
     let requiredShifts = shifts.filter(el => day.getDate() == el.date[2] && day.getMonth() == el.date[1]-1 && day.getFullYear() == el.date[0]);
     requiredShifts.forEach(el => {
-        if (el.status === 'N'){
-            code = code + '<div class="shift unconfirmed"';
-        } else {
-            code = code + '<div class="shift confirmed"';
-        };
-        code = code + ` data-id="${el.id}">${el.room}</div>`;
+        code += `<div class="shift confirmed" data-id="${el.id}">${el.room}</div>`;
     });
     return code;
 };
 
 const renderData = async () => {
     await renderUnconfirmedShifts();
-    shifts = await fetch('/office/get/shifts/confirmed/').then(res => res.json());
+    shifts = await fetch('/office/get/shifts/S/').then(res => res.json());
     createCalendar(shiftsCalendar, 'Календарь смен', renderDate, renderShifts);
     createCalendar(appointmentsCalendar, 'Календарь записей', renderDate, renderAppointments);
     document.querySelectorAll('.confirm').forEach(el => {

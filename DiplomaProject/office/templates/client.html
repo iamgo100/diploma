@@ -1,13 +1,60 @@
 {% extends "base/base.html" %}
 {% load static %}
 {% block head %}
+<link rel="stylesheet" href="{% static 'css/client.css' %}" />
+<link rel="stylesheet" href="{% static 'css/forms.css' %}"/>
 {% endblock head %}
 {% block title %}Личный кабинет{% endblock title %}
 {% block header %}Кабинет клиента{% endblock %}
 {% block content %}
-    <p>Скоро здесь будет много полезного</p>
-    <p><a href="{% url 'logout' %}">Выйти из аккаунта</a></p>
+    <div class="centerblock">
+        {% if ap_list %}
+        <div>
+            <h3>Ваши записи:</h3>
+            <ul>
+                {% for ap in ap_list %}
+                <li>Дата: {{ ap.date }}, время: {{ ap.time }}. {{ ap.service }} (цена: {{ ap.service.cost }})</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        <h2>Онлайн-запись в салон</h2>
+        <div class="form">
+            <form method="post">
+                {% csrf_token %}
+                <p>
+                    <label for="{{ form.service.id_for_label }}">{{ form.service.label }}</label>
+                    {{ form.service }}
+                    <span class="cost-text">Цена услуги: </span><span id="cost">0</span><span> рублей</span>
+                    {{ form.service.error }}
+                </p>
+                <p>
+                    <label for="{{ form.date.id_for_label }}">{{ form.date.label }}</label>
+                    {{ form.date }}
+                    <span class="helptext">{{ form.date.help_text }}</span>
+                    {{ form.date.error }}
+                    <span class="errorlist" id="error-mess"></span>
+                </p>
+                <p id="help-mess">Введите данные выше, чтобы увидеть дополнительную ифнормацию по вашей записи.</p>
+                <p class="hidden">
+                    <label for="time">Выберите время</label>
+                    {{ form.time }}
+                </p>
+            </form>
+            <p class="btn-cont"><button id="sub">Отправить</button></p>
+        </div>
+    </div>
+    <div id="menu">
+        <h3>Меню</h3>
+        <ul>
+            <li><a href="{% url 'logout' %}">Выйти из аккаунта</a></li>
+            <li><a href="{% url 'profile' %}">Мой профиль</a></li>
+        </ul>
+    </div>
 {% endblock %}
 {% block footer %}
 {% include "base/client_footer.html" %}
+{% endblock %}
+{% block scripts %}
+<script type="module" src="{% static 'js/client.js' %}"></script>
 {% endblock %}
