@@ -81,6 +81,7 @@
     text-align: center;
     color: #222;
     font-weight: bold;
+    overflow: hidden;
 }
 .property {
     margin: 1px;
@@ -98,9 +99,7 @@
     justify-content: space-between;
     width: 90%;
 }
-.centered-cont{
-    display: flex;
-    flex-direction: column;
+.calendar .centered-cont{
     margin: 2px;
     padding: 3px;
     border-radius: 15px;
@@ -128,6 +127,9 @@
         padding: 1px 3px;
     }
     .calendar tbody td {height: 70px;}
+    .inline-cont {
+        flex-direction: column;
+    }
 }
 
 @media (max-width : 480px) {

@@ -9,7 +9,7 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'password1', 'password2', )
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
 
 class ProfileForm(forms.ModelForm):
     phone_number = forms.CharField(
@@ -21,3 +21,11 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('phone_number',)
+
+class UpdateUserForm(forms.ModelForm):
+    first_name = forms.CharField(label='Ваше имя', help_text='Обязательное поле', required=True)
+    last_name = forms.CharField(label='Ваша фамилия', required=False)
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email')

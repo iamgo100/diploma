@@ -1,9 +1,28 @@
 {% extends "base/base.html" %}
 {% load static %}
-{% block title %}Личный кабинет{% endblock title %}
-{% block header %}Личный кабинет{% endblock %}
+{% block head %}<link rel="stylesheet" href="{% static 'css/profile.css' %}"/>{% endblock %}
+{% block title %}Профиль{% endblock title %}
+{% block header %}Мой профиль{% endblock %}
 {% block content %}
-    <h1>Здесь скоро будет ваш профиль</h1>
+<h2>Пользователь {{ user.username }}</h2>
+<p><span class="field-header">Имя:</span> {{ user.first_name }}</p>
+<p><span class="field-header">Фамилия:</span> {% if user.last_name %}{{ user.last_name }}{% else %}Не указано{% endif %}</p>
+<p><span class="field-header">Электронная почта:</span> {% if user.email %}{{ user.email }}{% else %}Не указано{% endif %}</p>
+<p><span class="field-header">Номер телефона:</span> {% if user.profile.phone_number %}{{ user.profile.phone_number }}{% else %}Не указано{% endif %}</p>
+<div id="menu" class="close centered-cont">
+    <div class="menu-bar">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+    </div>
+    <div class="menu-inner centered-cont">
+        <h3>Меню</h3>
+        <a href="{% url 'logout' %}">Выйти из аккаунта</a>
+        <a href="{% url 'office' %}">Вернуться в личный кабинет</a>
+        <a href="{% url 'profile_change' %}">Изменить мой профиль</a>
+        <a href="{% url 'password_change' %}">Изменить пароль</a>
+    </div>
+</div>
 {% endblock %}
 {% block footer %}
 {% if user.profile.role == "C" %}

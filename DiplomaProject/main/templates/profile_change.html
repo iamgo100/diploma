@@ -1,0 +1,19 @@
+{% extends "base/form.html" %}
+{% load static %}
+{% block title %}Изменение профиля{% endblock title %}
+{% block header %}Изменить мой профиль{% endblock %}
+{% block form-content %}
+<form method="post">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    {{ profile_form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>
+{% endblock %}
+{% block footer %}
+{% if user.profile.role == "C" %}
+    {% include "base/client_footer.html" %}
+{% else %}
+    {% include "base/admin_footer.html" %}
+{% endif %}
+{% endblock %}

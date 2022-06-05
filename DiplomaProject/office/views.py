@@ -27,7 +27,7 @@ def index(request):
 
 def client(request):
     if request.user.is_authenticated and request.user.profile.role == 'C':
-        ap_list = Appointment.objects.filter(client=request.user.profile, date__gte=timezone.now()).order_by('date')
+        ap_list = Appointment.objects.filter(client=request.user.profile, date__gte=timezone.now()).order_by('date', 'time')
         if request.method == 'POST':
             form = MakeAppointment(request.POST)
             if form.is_valid():

@@ -1,8 +1,6 @@
 .form {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    align-items: center;
+    width: 90%;
+    padding: 2% 5%;
 }
 .form *:focus {
     outline:none !important;
@@ -13,7 +11,7 @@
 .form input, select:focus-visible {
     border-color:#8c6dbd;
 }
-.form button[type='submit'] {
+.form button {
     border: 0px;
     cursor: pointer;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -22,25 +20,24 @@
     border-radius: 3px;
     padding: 7px;
 }
-.form button[type='submit']:hover {
+.form button:hover {
     background-color: #8c6dbd77;
 }
-.form button[type='submit']:active {
+.form button:active {
     background-color: #8c6dbd;
 }
-.form .helptext, ul {
+.form ul {
     font-size: small;
     display: block;
+}
+.form .helptext {
+    font-size: smaller;
+    display: block;
+    color: #666;
 }
 .form .errorlist {
     font-size: small;
     color: red;
     list-style: none;
     padding-left: 0;
-}
-.btn-cont {
-    width: 100%;
-    text-align: center;
-    padding: 0px;
-    margin: 0px;
 }

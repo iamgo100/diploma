@@ -7,23 +7,24 @@
 {% block header %}Кабинет администратора{% endblock %}
 {% block content %}
 <!-- <div id="shift-modal" class="showed wrapper-modal">{% include "base/modal.html" %}</div> -->
-<div class="centerblock">
-    <div id="shifts"></div>
-    <div id="appointments"></div>
+<div id="shifts"></div>
+<div id="appointments"></div>
+<div id="menu" class="close centered-cont">
+    <div class="menu-bar">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
     </div>
-    <div id="menu">
+    <div class="menu-inner centered-cont">
         <h3>Меню</h3>
-        <ul>
-            <li><a href="{% url 'logout' %}">Выйти из аккаунта</a></li>
-            <li><a href="{% url 'profile' %}">Мой профиль</a></li>
-            <li><a href="/admin">Войти в панель администратора</a></li>
-            <li class="ul-header">Регистрация пользователей:</li>
-            <ul class="with-padding">
-                <li><a href="{% url 'signup' role='A' %}">Регистрация администратора</a></li>
-                <li><a href="{% url 'signup' role='E' %}">Регистрация сотрудника</a></li>
-                <li><a href="{% url 'signup' role='C' %}">Регистрация клиента</a></li>
-            </ul>
-        </ul>
+        <a href="{% url 'logout' %}">Выйти из аккаунта</a>
+        <a href="{% url 'profile' %}">Мой профиль</a>
+        <a href="/admin">Войти в панель администратора</a>
+        <h4>Регистрация пользователей:</h4>
+        <a href="{% url 'signup' role='A' %}">Регистрация администратора</a>
+        <a href="{% url 'signup' role='E' %}">Регистрация сотрудника</a>
+        <a href="{% url 'signup' role='C' %}">Регистрация клиента</a>
+    </div>
 </div>
 {% endblock %}
 {% block footer %}

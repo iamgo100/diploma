@@ -12,7 +12,10 @@ const renderUnconfirmedShifts = async () => {
     if (unconfirmedShifts.length !== 0) {
         let code = '';
         unconfirmedShifts.forEach(el => {
-            code += `<li data-id="${el.id}"><span class="list-symbol">•</span><span>Смена от ${el.date[0]}-${el.date[1]}-${el.date[2]} в зале "${el.room}"</span><button class="confirm">Принять</button></li>`;
+            code += `<li data-id="${el.id}">
+            <span class="list-symbol">•</span>
+            <span>Смена от ${el.date[0]}-${el.date[1]}-${el.date[2]} в зале "${el.room}"</span>
+            <button class="confirm">Принять</button></li>`;
         });
         unconfirmedShiftsList.innerHTML = `<h3>Список непринятых смен</h3><ul>${code}</ul>`;
     }

@@ -6,9 +6,10 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <p class="btn-cont"><button type="submit">Войти</button></p>
+        <button type="submit">Войти</button>
     </form>
-    <p>Нет аккаунта? <a href="{% url 'signup' role='C' %}">Зарегистрироваться</a></p>
+    <p class="small-text">Нет аккаунта? <a href="{% url 'signup' role='C' %}">Зарегистрироваться</a></p>
+    <p class="small-text">Забыли пароль? <a href="{% url 'password_reset' %}">Восстановить</a></p>
 {% endblock %}
 {% block footer %}
 {% include "base/client_footer.html" %}

@@ -2,7 +2,8 @@ const timeSelect = document.getElementById('id_time');
 const form = document.querySelector('.form').querySelector('form');
 const service = document.getElementById('id_service');
 const date = document.getElementById('id_date');
-const errorMessage = document.getElementById('error-mess');
+const errorMessageDate = document.getElementById('error-mess-date');
+const errorMessageTime = document.getElementById('error-mess-time');
 const helpMessage = document.getElementById('help-mess');
 const cost = document.getElementById('cost');
 const bntSubmit = document.getElementById('sub');
@@ -27,7 +28,7 @@ const renderInfo = async () => {
                 timeSelect.parentElement.classList.remove('hidden');
                 helpMessage.classList.add('hidden');
             } else {
-                errorMessage.textContent = 'Неверно введена дата. Следуйте шаблону.'
+                errorMessageDate.textContent = 'Неверно введена дата. Следуйте шаблону.'
             };
         };
     };
@@ -41,4 +42,10 @@ await renderInfo();
 
 form.addEventListener('change', renderInfo);
 form.addEventListener('submit', event => event.preventDefault());
-bntSubmit.addEventListener('click', () => form.submit());
+bntSubmit.addEventListener('click', () => {
+    if (timeSelect.value != 0) {
+        form.submit()
+    } else {
+        errorMessageTime.textContent = 'Выберите время вашей записи.'
+    }
+});
