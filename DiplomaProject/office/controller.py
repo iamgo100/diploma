@@ -1,6 +1,5 @@
 import datetime
 from django.http import HttpResponse
-from django.shortcuts import redirect
 from django.utils import timezone
 from .models import Appointment, Service, Shift
 from .forms import ShiftForm
@@ -113,6 +112,12 @@ def post_shifts_update(request, id):
             return HttpResponse('Success')
         else:
             return HttpResponse(form.errors)
+    return HttpResponse('Error')
+
+def post_shifts_delete(request, id):
+    if request.method == 'POST':
+        Shift.objects.get(pk=id).delete()
+        return HttpResponse('Success')
     return HttpResponse('Error')
 
 # возвращает список занятого времени смены по записям

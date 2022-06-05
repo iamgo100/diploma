@@ -14,6 +14,7 @@ urlpatterns = [
     path('post/shifts/confirm/<int:id>', controller.post_shifts_confirm),
     path('post/shifts/new/', controller.post_shifts_new),
     path('post/shifts/update/<int:id>', controller.post_shifts_update),
+    path('post/shifts/delete/<int:id>', controller.post_shifts_delete),
     path('get/appointments/time/<int:year>-<int:month>-<int:day>/<int:service_id>/', controller.get_time_for_appointment),
     path('get/service-<int:id>/cost/', controller.get_service_cost),
 ]

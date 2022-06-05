@@ -32,7 +32,7 @@ shiftsCalendar.addEventListener('click', async ({target: t}) => {
     let plus = t.closest('.plus');
     if (shift) { // редактирование
         await showShiftForm(modal);
-        await renderShiftData(shift.dataset.id, modal);
+        renderShiftData(shift.dataset.id, modal);
         showModal(modal);
     } else if (plus) { // добавление
         let day = Number(plus.parentElement.lastElementChild.textContent);
