@@ -1,4 +1,14 @@
-<div class="modal">
-    <h2 class="title"></h2>
-    <div></div>
+<div class="modal-wrapper invisible">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 class="modal-title"></h2>
+            <button id="btn-close">🞫</button>
+        </div>
+        <div class="modal-inner">
+            <div class="form">
+                <form method="post" action="">{% csrf_token %}</form>
+                <button id="btn-submit"></button>
+            </div>
+        </div>
+    </div>
 </div>

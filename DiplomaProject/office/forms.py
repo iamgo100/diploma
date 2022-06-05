@@ -1,5 +1,6 @@
+from dataclasses import field
 import datetime
-from .models import Appointment, Service
+from .models import Appointment, Service, Shift
 from django import forms
 
 HOUR_CHOICES = [(datetime.time(hour=x), '{:02d}:00'.format(x)) for x in range(0, 2)]
@@ -12,3 +13,8 @@ class MakeAppointment(forms.ModelForm):
     class Meta:
         model = Appointment
         fields = ['service', 'date', 'time']
+
+class ShiftForm(forms.ModelForm):
+    class Meta:
+        model = Shift
+        fields = ['date', 'master', 'room']

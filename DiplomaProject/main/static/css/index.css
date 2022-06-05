@@ -151,9 +151,13 @@ a:visited {color: #8c6dbd}
         transition: 500ms;
         background-color: #8c6dbd3f;
         width: 100%;
+        z-index: 5;
     }
     #content {width: 95%;}
-    .menu-bar {display: inline-block}
+    .menu-bar {
+        display: inline-block;
+        z-index: 7;
+    }
     .menu-inner {
         margin-top: 70px;
         width: 90%;

@@ -1,5 +1,3 @@
-// const appointments = JSON.parse(JSON.parse(document.getElementById('appointments-calendar').textContent));
-
 let appointments = await fetch('/office/get/appointments/');
 appointments = await appointments.json();
 

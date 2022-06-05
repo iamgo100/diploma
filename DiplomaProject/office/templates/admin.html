@@ -2,11 +2,12 @@
 {% load static %}
 {% block head %}
 <link rel="stylesheet" href="{% static 'css/admin.css' %}" />
+<link rel="stylesheet" href="{% static 'css/forms.css' %}"/>
 {% endblock head %}
 {% block title %}Личный кабинет{% endblock title %}
 {% block header %}Кабинет администратора{% endblock %}
 {% block content %}
-<!-- <div id="shift-modal" class="showed wrapper-modal">{% include "base/modal.html" %}</div> -->
+{% include "base/modal.html" %}
 <div id="shifts"></div>
 <div id="appointments"></div>
 <div id="menu" class="close centered-cont">

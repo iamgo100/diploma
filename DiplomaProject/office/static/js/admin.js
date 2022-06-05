@@ -1,6 +1,8 @@
 "use strict";
 import {createCalendar, renderDate} from './calendar.js';
 import {renderAppointments} from './appointment.js';
+import {initModal, showModal} from './modal.js';
+import { showShiftForm, newShift, renderShiftData } from './shift.js';
 const shiftsCalendar = document.getElementById('shifts');
 const appointmentsCalendar = document.getElementById('appointments');
 
@@ -19,30 +21,40 @@ const renderShifts = (day) => {
     return code;
 };
 
+const modal = initModal();
 const shifts = await fetch('/office/get/shifts/all/').then(res => res.json());
 createCalendar(shiftsCalendar, 'Календарь смен', renderDate, renderShifts);
 createCalendar(appointmentsCalendar, 'Календарь записей', renderDate, renderAppointments);
 
 // обработка нажатий на календарь смен
-shiftsCalendar.addEventListener('click', ({target: t}) => {
+shiftsCalendar.addEventListener('click', async ({target: t}) => {
     let shift = t.closest('.master');
     let plus = t.closest('.plus');
     if (shift) { // редактирование
-        console.log(shift.dataset.id);
+        await showShiftForm(modal);
+        await renderShiftData(shift.dataset.id, modal);
+        showModal(modal);
     } else if (plus) { // добавление
-        let day = plus.parentElement.lastElementChild.textContent;
-        console.log(day, renderDate.month+1, renderDate.year);
+        let day = Number(plus.parentElement.lastElementChild.textContent);
+        await showShiftForm(modal);
+        let date = new Date(renderDate.year, renderDate.month, day+1)
+        newShift(date, modal);
+        showModal(modal);
     };
 });
 
 // обработка нажатий на календарь записей
-appointmentsCalendar.addEventListener('click', ({target: t}) => {
+appointmentsCalendar.addEventListener('click', async ({target: t}) => {
     let appointment = t.closest('.appointment');
     let plus = t.closest('.plus');
     if (appointment) { // редактирование
         console.log(appointment.dataset.id);
+        let res = await fetch(`/office/get/appointments/${appointment.dataset.id}`).then(res => res.json());
+        console.log(res)
+        showModal(modal);
     } else if (plus) { // добавление
         let day = plus.parentElement.lastElementChild.textContent;
         console.log(day, renderDate.month+1, renderDate.year);
+        showModal(modal);
     };
 });

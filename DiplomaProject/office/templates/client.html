@@ -28,11 +28,9 @@
         </p>
         <p>Цена услуги: <span id="cost">0</span> рублей</p>
         <p>
-            <label for="{{ form.date.id_for_label }}">{{ form.date.label }}</label>
+            <label for="{{ form.date.id_for_label }}">Выберите дату</label>
             {{ form.date }}
-            <span class="helptext">{{ form.date.help_text }}</span>
             {{ form.date.error }}
-            <span class="errorlist" id="error-mess-date"></span>
         </p>
         <p id="help-mess">Введите данные выше, чтобы выбрать время вашей записи.</p>
         <p class="hidden">

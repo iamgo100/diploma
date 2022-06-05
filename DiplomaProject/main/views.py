@@ -1,6 +1,8 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .forms import ProfileForm, SignUpForm, UpdateUserForm
 from .models import Profile
+import json
 
 def index(request):
     if request.user.is_authenticated:
@@ -48,3 +50,10 @@ def profile_change(request):
             profile_form = ProfileForm(instance=request.user.profile)
         return render(request, 'profile_change.html', {'user_form': user_form, 'profile_form': profile_form})
     return redirect('main')
+
+def get_masters(request):
+    masters = json.dumps([{
+        'master': str(master),
+        'master_id': master.id
+    } for master in Profile.objects.filter(role='E')])
+    return HttpResponse(masters)
