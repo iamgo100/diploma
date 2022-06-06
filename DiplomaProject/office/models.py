@@ -82,6 +82,12 @@ class Service(models.Model):
 
     def __str__(self):
         return self.service_name
+    
+    def get_room(self, room):
+        if room == '1':
+            return 'Парикмахерский'
+        elif room == '2':
+            return 'Маникюрный'
 
 class Appointment(models.Model):
     id = models.AutoField(primary_key=True)

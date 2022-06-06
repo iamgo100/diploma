@@ -22,4 +22,7 @@ urlpatterns = [
     path('post/shifts/delete/<int:id>', controller.post_shifts_delete),
     path('get/appointments/time/<int:year>-<int:month>-<int:day>/<int:service_id>/', controller.get_time_for_appointment),
     path('get/service-<int:id>/cost/', controller.get_service_cost),
+    path('post/service/new/', controller.post_service_new),
+    path('post/service/update/<int:id>', controller.post_service_update),
+    path('post/service/delete/<int:id>', controller.post_service_delete)
 ]

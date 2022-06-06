@@ -1,7 +1,7 @@
 {% extends "base/base.html" %}
 {% load static %}
 {% block head %}
-<link rel="stylesheet" href="{% static 'css/admin.css' %}" />
+<link rel="stylesheet" href="{% static 'css/services.css' %}" />
 <link rel="stylesheet" href="{% static 'css/forms.css' %}"/>
 {% endblock head %}
 {% block title %}Личный кабинет{% endblock title %}
@@ -10,7 +10,21 @@
 {% include "base/modal.html" %}
 <div id="services">
     <h2>Список предоставляемых услуг</h2>
-    
+    {% if services_list %}
+    <table class="service-table">
+        <thead>
+            <tr><td>Название услуги</td><td>Цена</td><td>Длительность<br>(мин.)</td><td>Зал</td></tr>
+        </thead>
+        <tbody>
+        {% for s in services_list %}
+        <tr data-id="{{ s.id }}" class="srvc-row"><td><span class="chng-srvc">{{ s.name }}</span></td><td class="center-text">{{ s.cost }}</td><td class="center-text">{{ s.duration }}</td><td class="center-text" data-id="{{ s.room_id }}">{{ s.room }}</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>У вас нет ни одной предоставляемой услуги. Создайте ее прямо сейчас!</p>
+    {% endif %}
+    <button class="btn" id="create-btn">Создать услугу</button>
 </div>
 <div id="menu" class="close centered-cont">
     <div class="menu-bar">
@@ -22,7 +36,7 @@
         <h3>Меню</h3>
         <a href="{% url 'logout' %}">Выйти из аккаунта</a>
         <a href="{% url 'profile' %}">Мой профиль</a>
-        <a href="{% url 'admin' %}">Вернуться в кабинет администратора</a>
+        <a href="{% url 'admin' %}">Вернуться в<br>кабинет администратора</a>
         <h4>Регистрация пользователей:</h4>
         <a href="{% url 'signup' role='A' %}">Регистрация администратора</a>
         <a href="{% url 'signup' role='E' %}">Регистрация сотрудника</a>
@@ -33,5 +47,5 @@
 {% include "base/admin_footer.html" %}
 {% endblock %}
 {% block scripts %}
-<script type="module" src="{% static 'js/admin.js' %}"></script>
+<script type="module" src="{% static 'js/services.js' %}"></script>
 {% endblock %}

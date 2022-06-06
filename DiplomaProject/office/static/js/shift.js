@@ -1,5 +1,6 @@
 export const renderShiftData = async (id, modal) => {
-    modal.querySelector('.form').innerHTML += '<button id="btn-delete">Удалить</button>';
+    if (modal.querySelector('#btn-delete') === null)
+        modal.querySelector('.form').innerHTML += '<button id="btn-delete">Удалить</button>';
     let {date, master_id, room_id} = await fetch(`/office/get/shifts/${id}`).then(res => res.json());
     modal.querySelector('#id_date').value = date;
     modal.querySelector('.modal-title').textContent = 'Редактирование смены';

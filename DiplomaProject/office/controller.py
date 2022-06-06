@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from main.models import Profile
 from .models import Appointment, Service, Shift
-from .forms import ShiftForm, AppointmentForm
+from .forms import ServiceForm, ShiftForm, AppointmentForm
 import json, random, string
 
 list_of_times = [
@@ -254,3 +254,29 @@ def get_time_for_appointment(request, year, month, day, service_id):
 def get_service_cost(request, id):
     service_cost = Service.objects.get(pk=id).cost
     return HttpResponse(str(service_cost))
+
+def post_service_new(request):
+    if request.method == 'POST':
+        form = ServiceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse('Success')
+        else:
+            return HttpResponse(form.errors)
+    return HttpResponse('Error')
+
+def post_service_update(request, id):
+    if request.method == 'POST':
+        form = ServiceForm(request.POST, instance=Service.objects.get(pk=id))
+        if form.is_valid():
+            form.save()
+            return HttpResponse('Success')
+        else:
+            return HttpResponse(form.errors)
+    return HttpResponse('Error')
+
+def post_service_delete(request, id):
+    if request.method == 'POST':
+        Service.objects.get(pk=id).delete()
+        return HttpResponse('Success')
+    return HttpResponse('Error')

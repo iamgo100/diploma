@@ -5,20 +5,3 @@
     width: 90%;
     margin-top: 20px;
 }
-#menu ul .with-padding {
-    list-style: circle;
-    padding-left: 20px;
-}
-.ul-header {
-    margin: 5px 0px;
-    font-weight: bold;
-}
-
-@media (max-width : 1024px) {
-}
-
-@media (max-width : 760px) {
-}
-
-@media (max-width : 480px) {
-}

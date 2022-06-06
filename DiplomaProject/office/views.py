@@ -40,6 +40,13 @@ def employee(request):
 
 def services(request):
     if request.user.is_authenticated and request.user.profile.role == 'A':
-        services = Service.objects.all()
+        services = [{
+            'name': s.service_name,
+            'duration': s.duration,
+            'room': s.get_room(s.room),
+            'room_id': s.room,
+            'cost': s.cost,
+            'id': s.id
+        } for s in Service.objects.all().order_by('service_name')]
         return render(request, 'services.html', {'services_list': services})
     return redirect('office')
