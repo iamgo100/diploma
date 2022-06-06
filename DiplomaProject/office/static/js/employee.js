@@ -1,9 +1,9 @@
 "use strict";
 import {createCalendar, renderDate} from './calendar.js';
-import {renderAppointments} from './appointment.js';
+import {renderAppointments, showAppointmentForm, newAppointment} from './appointment.js';
+import {initModal, showModal} from './modal.js';
 const unconfirmedShiftsList = document.getElementById('unconfirmed-shifts');
 const shiftsCalendar = document.getElementById('shifts');
-const appointmentsCalendar = document.getElementById('appointments');
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
 // отрисовка списка непринятых смен
@@ -21,21 +21,21 @@ const renderUnconfirmedShifts = async () => {
     }
 };
 
-// отрисовка смен на день
-const renderShifts = (day) => {
+// отрисовка смен и записей на день
+const renderShiftsAndAppointments = (day) => {
     let code = '';
     let requiredShifts = shifts.filter(el => day.getDate() == el.date[2] && day.getMonth() == el.date[1]-1 && day.getFullYear() == el.date[0]);
     requiredShifts.forEach(el => {
         code += `<div class="shift confirmed" data-id="${el.id}">${el.room}</div>`;
     });
+    code += renderAppointments(day);
     return code;
 };
 
 const renderData = async () => {
     await renderUnconfirmedShifts();
     shifts = await fetch('/office/get/shifts/S/').then(res => res.json());
-    createCalendar(shiftsCalendar, 'Календарь смен', renderDate, renderShifts);
-    createCalendar(appointmentsCalendar, 'Календарь записей', renderDate, renderAppointments);
+    createCalendar(shiftsCalendar, 'Календарь смен и записей', renderDate, renderShiftsAndAppointments);
     document.querySelectorAll('.confirm').forEach(el => {
         el.addEventListener('click', async () => {
             let sh = el.parentElement.dataset.id;
@@ -50,24 +50,19 @@ const renderData = async () => {
 };
 
 let shifts = [];
+const modal = initModal();
 await renderData();
 
-// обработка нажатий на календарь смен
-shiftsCalendar.addEventListener('click', ({target: t}) => {
-    let shift = t.closest('.shift');
+// обработка нажатий на календарь
+shiftsCalendar.addEventListener('click', async ({target: t}) => {
     let plus = t.closest('.plus');
-    if (shift) { // редактирование
-        console.log(shift.dataset.id);
-    } else if (plus) { // добавление
-        let day = plus.parentElement.lastElementChild.textContent;
-        console.log(day, renderDate.month+1, renderDate.year);
+    if (plus) { // добавление
+        if (plus.parentElement.parentElement.querySelector('.shift')){
+            await showAppointmentForm(modal, 'E');
+            let day = Number(plus.parentElement.lastElementChild.textContent);
+            let date = new Date(renderDate.year, renderDate.month, day+1);
+            newAppointment(date, modal);
+            showModal(modal);
+        } else alert('Вы не можете создать запись на эту дату. Обратитесь к администратору салона.')
     };
-});
-
-// обработка нажатий на календарь записей
-appointmentsCalendar.addEventListener('click', ({target: t}) => {
-    let appointment = t.closest('.appointment');
-    if (appointment) { // редактирование
-        console.log(appointment.dataset.id);
-    }
 });

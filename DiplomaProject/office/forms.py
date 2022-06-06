@@ -1,4 +1,3 @@
-from dataclasses import field
 import datetime
 from .models import Appointment, Service, Shift
 from django import forms
@@ -18,3 +17,8 @@ class ShiftForm(forms.ModelForm):
     class Meta:
         model = Shift
         fields = ['date', 'master', 'room']
+
+class AppointmentForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        fields = ['service', 'date', 'time', 'shift', 'client']

@@ -1,6 +1,6 @@
 "use strict";
 import {createCalendar, renderDate} from './calendar.js';
-import {renderAppointments} from './appointment.js';
+import {renderAppointments, showAppointmentForm, newAppointment, renderAppointmentData} from './appointment.js';
 import {initModal, showModal} from './modal.js';
 import { showShiftForm, newShift, renderShiftData } from './shift.js';
 const shiftsCalendar = document.getElementById('shifts');
@@ -35,9 +35,9 @@ shiftsCalendar.addEventListener('click', async ({target: t}) => {
         renderShiftData(shift.dataset.id, modal);
         showModal(modal);
     } else if (plus) { // добавление
-        let day = Number(plus.parentElement.lastElementChild.textContent);
         await showShiftForm(modal);
-        let date = new Date(renderDate.year, renderDate.month, day+1)
+        let day = Number(plus.parentElement.lastElementChild.textContent);
+        let date = new Date(renderDate.year, renderDate.month, day+1);
         newShift(date, modal);
         showModal(modal);
     };
@@ -48,13 +48,14 @@ appointmentsCalendar.addEventListener('click', async ({target: t}) => {
     let appointment = t.closest('.appointment');
     let plus = t.closest('.plus');
     if (appointment) { // редактирование
-        console.log(appointment.dataset.id);
-        let res = await fetch(`/office/get/appointments/${appointment.dataset.id}`).then(res => res.json());
-        console.log(res)
+        await showAppointmentForm(modal, 'A');
+        await renderAppointmentData(appointment.dataset.id, modal);
         showModal(modal);
     } else if (plus) { // добавление
-        let day = plus.parentElement.lastElementChild.textContent;
-        console.log(day, renderDate.month+1, renderDate.year);
+        await showAppointmentForm(modal, 'A');
+        let day = Number(plus.parentElement.lastElementChild.textContent);
+        let date = new Date(renderDate.year, renderDate.month, day+1);
+        newAppointment(date, modal);
         showModal(modal);
     };
 });

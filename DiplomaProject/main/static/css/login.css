@@ -1,0 +1,20 @@
+@import url(./forms.css);
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    padding: 0px;
+    margin: 0px;
+}
+.form p {
+    width: max-content !important;
+    margin: 5px;
+}
+.form form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}

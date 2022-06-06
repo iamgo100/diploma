@@ -2,7 +2,6 @@ const timeSelect = document.getElementById('id_time');
 const form = document.querySelector('.form').querySelector('form');
 const service = document.getElementById('id_service');
 const date = document.getElementById('id_date');
-const errorMessageDate = document.getElementById('error-mess-date');
 const errorMessageTime = document.getElementById('error-mess-time');
 const helpMessage = document.getElementById('help-mess');
 const cost = document.getElementById('cost');

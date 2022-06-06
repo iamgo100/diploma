@@ -1,22 +1,16 @@
 @import "./calendar.css";
+@import url(./modal.css);
 #shifts {width: 90%;}
-#appointments {
-    width: 90%;
-    margin-top: 20px;
-}
 .shift{
     margin: 2px;
     padding: 3px;
     border-radius: 15px;
-    cursor: pointer;
     text-align: center;
     color: #222;
     overflow: hidden;
+    cursor: default
 }
-#appointments .plus {display: none;}
-#appointments .wrapper {
-    justify-content: flex-end;
-}
+.calendar .centered-cont {cursor: default}
 #unconfirmed-shifts {width: 90%;}
 #unconfirmed-shifts ul {padding-left: 0px;}
 #unconfirmed-shifts li {

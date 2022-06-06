@@ -18,6 +18,7 @@ export const renderShiftData = async (id, modal) => {
         }).then(res => res.text());
         if (res === 'Success') window.location.replace('/office/')
         else {
+            console.log(res);
             modal.querySelector('#error-mess-master').textContent = 'Выберите мастера для смены.'
         };
     });
@@ -29,6 +30,7 @@ export const renderShiftData = async (id, modal) => {
         }).then(res => res.text());
         if (res === 'Success') window.location.replace('/office/')
         else {
+            console.log(res);
             modal.querySelector('#common-error').textContent = 'Не удалось удалить запись. Обновите страницу и попробуйте еще раз.'
         }
     })
@@ -49,6 +51,7 @@ export const newShift = (date, modal) => {
         }).then(res => res.text());
         if (res === 'Success') window.location.replace('/office/')
         else {
+            console.log(res);
             modal.querySelector('#error-mess-master').textContent = 'Выберите мастера для смены.'
         };
     });

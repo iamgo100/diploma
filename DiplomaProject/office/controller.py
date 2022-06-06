@@ -1,9 +1,11 @@
 import datetime
 from django.http import HttpResponse
 from django.utils import timezone
+from django.contrib.auth.models import User
+from main.models import Profile
 from .models import Appointment, Service, Shift
-from .forms import ShiftForm
-import json
+from .forms import ShiftForm, AppointmentForm
+import json, random, string
 
 list_of_times = [
     datetime.time(9, 0), datetime.time(9, 30), datetime.time(10, 0), datetime.time(10, 30),
@@ -13,6 +15,14 @@ list_of_times = [
     datetime.time(17, 0), datetime.time(17, 30), datetime.time(18, 0), datetime.time(18, 30),
     datetime.time(19, 0), datetime.time(19, 30), datetime.time(20, 0), datetime.time(20, 30)
 ]
+
+# возвращает список из БД Услуги
+def get_services(request):
+    services = json.dumps([{
+        'id': s.id,
+        'service': str(s)
+    } for s in Service.objects.all()])
+    return HttpResponse(services)
 
 # возвращает список из БД Записи
 def get_appointments(request):
@@ -36,15 +46,76 @@ def get_appointments(request):
 def get_appointment_by_id(request, id):
     appointment = Appointment.objects.get(pk=id)
     res_ap = {
-        'id': appointment.id, 
         'client_name': appointment.client.user.first_name,
         'client_phone': appointment.client.phone_number,
-        'date': str(appointment.date).split('-'),
+        'date': str(appointment.date),
         'time': str(appointment.time).split(':'),
-        'service': str(appointment.service),
-        'shift': str(appointment.shift)
+        'service_id': appointment.service.id,
+        'master_id': appointment.shift.master.id if appointment.shift else ''
     }
     return HttpResponse(json.dumps(res_ap))
+
+def get_or_create_client(first_name, phone):
+    # проверяем наличие клиента с таким именем и номером телефона
+    users = User.objects.filter(first_name=first_name)
+    client = None
+    for user in users:
+        client = list(Profile.objects.filter(user=user, phone_number=phone))
+        if client:
+            break
+    if not client: # если такого клиента не оказалось, создаем его
+        letters = string.ascii_lowercase + ''.join(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'])
+        rand_string = ''.join(random.sample(letters, 8))
+        user = User.objects.create(username=phone, password=rand_string, first_name=first_name)
+        client = Profile.objects.create(user=user, phone_number=phone)
+    if type(client) == list:
+        client = client[0]
+    return client
+
+# обновляем данные формы по ее же данным
+def update_form_instance(form_instance):
+    service = Service.objects.get(pk=form_instance.get('service'))
+    master = Profile.objects.get(pk=form_instance.get('master'))
+    shift = Shift.objects.get_or_create(date=form_instance.get('date'), master=master, room=service.room)[0]
+    client = get_or_create_client(form_instance.get('first_name'), form_instance.get('phone_number'))
+    form_instance.update({'client': client, 'shift': shift})
+    return form_instance
+
+def post_appointments_new(request):
+    if request.method == 'POST':
+        form_instance = request.POST
+        form_instance = form_instance.copy()
+        if not form_instance.get('master'):
+            form_instance.update({'master': request.user.profile.id})
+        form_instance = update_form_instance(form_instance) # обновляем данные формы
+        # создаем через форму новую запись
+        form = AppointmentForm(form_instance)
+        if form.is_valid():
+            form.save()
+            return HttpResponse('Success')
+        else:
+            return HttpResponse(form.errors)
+    return HttpResponse('Error')
+
+def post_appointments_update(request, id):
+    if request.method == 'POST':
+        form_instance = request.POST
+        form_instance = form_instance.copy()
+        form_instance = update_form_instance(form_instance) # получаем и обновляем данные формы
+        # через форму записи проверяем введенные данные и сохраняем их, если все верно
+        form = AppointmentForm(form_instance, instance=Appointment.objects.get(pk=id))
+        if form.is_valid():
+            form.save()
+            return HttpResponse('Success')
+        else:
+            return HttpResponse(form.errors)
+    return HttpResponse('Error')
+
+def post_appointments_delete(request, id):
+    if request.method == 'POST':
+        Appointment.objects.get(pk=id).delete()
+        return HttpResponse('Success')
+    return HttpResponse('Error')
 
 # получить информацию по смене по ее id
 def get_shift_by_id(request, id):
@@ -77,7 +148,7 @@ def get_shifts_for_employee(request, status):
             'id': s.id,
             'date': str(s.date).split('-'),
             'room': s.get_room(s.room)
-            } for s in Shift.objects.filter(master=this_user.profile, status=status).order_by('date', 'time')])
+            } for s in Shift.objects.filter(master=this_user.profile, status=status).order_by('date')])
         return HttpResponse(list_of_shifts)
     return HttpResponse('Error')
 

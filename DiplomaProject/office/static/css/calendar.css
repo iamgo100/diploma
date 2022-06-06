@@ -82,7 +82,7 @@
     color: #222;
     font-weight: bold;
     overflow: hidden;
-    width: 100%;
+    width: 90%;
 }
 .property {
     margin: 1px;
@@ -93,7 +93,7 @@
     font-size: smaller;
     text-align: center;
     color: #333;
-    width: 100%;
+    width: 90%;
 }
 .inline-cont {
     display: flex;

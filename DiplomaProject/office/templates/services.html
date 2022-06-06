@@ -8,8 +8,10 @@
 {% block header %}Кабинет администратора{% endblock %}
 {% block content %}
 {% include "base/modal.html" %}
-<div id="shifts"></div>
-<div id="appointments"></div>
+<div id="services">
+    <h2>Список предоставляемых услуг</h2>
+    
+</div>
 <div id="menu" class="close centered-cont">
     <div class="menu-bar">
         <div class="bar1"></div>
@@ -20,7 +22,7 @@
         <h3>Меню</h3>
         <a href="{% url 'logout' %}">Выйти из аккаунта</a>
         <a href="{% url 'profile' %}">Мой профиль</a>
-        <a href="{% url 'services' %}">Предоставляемые услуги</a>
+        <a href="{% url 'admin' %}">Вернуться в кабинет администратора</a>
         <h4>Регистрация пользователей:</h4>
         <a href="{% url 'signup' role='A' %}">Регистрация администратора</a>
         <a href="{% url 'signup' role='E' %}">Регистрация сотрудника</a>

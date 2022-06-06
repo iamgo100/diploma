@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
-from .models import Appointment
+from .models import Appointment, Service
 from .forms import MakeAppointment
 
 def index(request):
@@ -36,4 +36,10 @@ def admin(request):
 def employee(request):
     if request.user.is_authenticated and request.user.profile.role == 'E':
         return render(request, 'employee.html')
+    return redirect('office')
+
+def services(request):
+    if request.user.is_authenticated and request.user.profile.role == 'A':
+        services = Service.objects.all()
+        return render(request, 'services.html', {'services_list': services})
     return redirect('office')
