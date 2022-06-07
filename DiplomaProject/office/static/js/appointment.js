@@ -11,10 +11,8 @@ export const renderAppointments = (day) => {
             code += '<div class="appointment centered-cont confirmed"'
         };
         code += ` data-id="${el.id}">
-        <div class="inline-cont">
-            <span class="property">${el.time[0]}:${el.time[1]}</span>
-            <span class="name">${el.client}</span>
-        </div>
+        <span class="name">${el.client}</span>
+        <span class="property">${el.time[0]}:${el.time[1]}</span>
         <span class="property">${el.service}</span>
         </div>`
     });
@@ -105,6 +103,8 @@ export const showAppointmentForm = async (modal, role) => {
             <select name="master" id="id_master"><option value="">--------</option>${mastersCode}</select>
         <p>
         `
+    } else {
+        form.querySelector('#id_date').setAttribute("disabled", "disabled");
     }
     form.prepend(csrftoken);
 }

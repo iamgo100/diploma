@@ -35,7 +35,7 @@ const renderShiftsAndAppointments = (day) => {
 const renderData = async () => {
     await renderUnconfirmedShifts();
     shifts = await fetch('/office/get/shifts/S/').then(res => res.json());
-    createCalendar(shiftsCalendar, 'Календарь смен и записей', renderDate, renderShiftsAndAppointments);
+    createCalendar(shiftsCalendar, 'Календарь смен', renderDate, renderShiftsAndAppointments);
     document.querySelectorAll('.confirm').forEach(el => {
         el.addEventListener('click', async () => {
             let sh = el.parentElement.dataset.id;
