@@ -1,8 +1,30 @@
 from django.http import HttpResponse
+from django.db import IntegrityError
 from django.shortcuts import render, redirect
-from .forms import ProfileForm, SignUpForm, UpdateUserForm
+from django.contrib.auth.models import User
+from .forms import ProfileForm, SignUpClientForm, SignUpEmplForm, UpdateUserForm
 from .models import Profile
-import json
+import json, random, string
+
+def get_or_create_user(first_name, phone, role='C'):
+    # проверяем наличие клиента с таким именем и номером телефона
+    users = User.objects.filter(first_name=first_name)
+    this_user = None
+    for user in users:
+        this_user = list(Profile.objects.filter(user=user, phone_number=phone))
+        if this_user:
+            break
+    if not this_user: # если такого клиента не оказалось, создаем его
+        letters = string.ascii_lowercase + ''.join(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'])
+        rand_string = ''.join(random.sample(letters, 8))
+        try:
+            user = User.objects.create(username=phone, password=rand_string, first_name=first_name)
+            this_user = Profile.objects.create(user=user, phone_number=phone, role=role)
+        except IntegrityError:
+            this_user = 'unique_error'
+    if type(this_user) == list:
+        this_user = this_user[0]
+    return this_user
 
 def index(request):
     if request.user.is_authenticated:
@@ -12,22 +34,32 @@ def index(request):
 
 def signup(request, role='C'):
     if request.method == 'POST':
-        user_form = SignUpForm(request.POST)
+        if role == 'C':
+            user_form = SignUpClientForm(request.POST)
+        else:
+            user_form = SignUpEmplForm(request.POST)
         profile_form = ProfileForm(request.POST)
         if user_form.is_valid() and profile_form.is_valid():
-            user = user_form.save()
-            user.first_name = user_form.cleaned_data.get('first_name')
-            user.last_name = user_form.cleaned_data.get('last_name')
-            user.save()
-            user.refresh_from_db()
-            phone = profile_form.cleaned_data.get('phone_number')
-            profile = Profile.objects.create(user=user, phone_number=phone, role=role)
-            profile.save()
+            if role == 'C':
+                user = user_form.save()
+                user.save()
+                user.refresh_from_db()
+                phone = profile_form.cleaned_data.get('phone_number')
+                Profile.objects.create(user=user, role=role, phone_number=phone)
+            else:
+                first_name = user_form.cleaned_data.get('first_name')
+                phone = profile_form.cleaned_data.get('phone_number')
+                res = get_or_create_user(first_name, phone, role=role)
+                if res == 'unique_error':
+                    return render(request, 'registration/signup.html', {'user_form': user_form, 'profile_form': profile_form, 'unique_error': True})
             if request.user.is_authenticated:
                 return redirect('office')
             return redirect('login')
     else:
-        user_form = SignUpForm()
+        if role == 'C':
+            user_form = SignUpClientForm()
+        else:
+            user_form = SignUpEmplForm()
         profile_form = ProfileForm()
     return render(request, 'registration/signup.html', {'user_form': user_form, 'profile_form': profile_form})
 

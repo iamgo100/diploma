@@ -1,10 +1,18 @@
 from django.db import models
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.utils import timezone
 from main.models import Profile
 
-def get_deleted_user():
-    return get_user_model().objects.get_or_create(username='deleted', first_name='Удален')[0]
+def get_deleted_user(role):
+    user = User.objects.get_or_create(username=f'deleted_{role}', first_name='Удален')[0]
+    profile = Profile.objects.get_or_create(user=user, role=role)[0]
+    return profile
+
+def get_deleted_user_c():
+    return get_deleted_user('C')
+
+def get_deleted_user_e():
+    return get_deleted_user('E')
 
 class Shift(models.Model):
     id = models.AutoField(primary_key=True)
@@ -32,7 +40,7 @@ class Shift(models.Model):
     )
     master = models.ForeignKey(
         Profile,
-        on_delete=models.SET(get_deleted_user),
+        on_delete=models.SET(get_deleted_user_e),
         limit_choices_to={'role': 'E'},
         verbose_name='Мастер смены'
     )
@@ -108,7 +116,7 @@ class Appointment(models.Model):
     )
     client = models.ForeignKey(
         Profile,
-        on_delete=models.SET(get_deleted_user),
+        on_delete=models.SET(get_deleted_user_c),
         limit_choices_to={'role': 'C'},
         verbose_name='Клиент',
         null=True

@@ -104,7 +104,7 @@ export const showAppointmentForm = async (modal, role) => {
         <p>
         `
     } else {
-        form.querySelector('#id_date').setAttribute("disabled", "disabled");
+        form.querySelector('#id_date').disabled = true;
     }
     form.prepend(csrftoken);
 }
@@ -137,7 +137,11 @@ export const renderAppointmentData = async (id, modal) => {
         if (res === 'Success') window.location.replace('/office/')
         else {
             console.log(res);
-            modal.querySelector('#common-error').textContent = 'В форме есть ошибки. Проверьте данные формы еще раз и повторите отправку.'
+            if (res == 'client') modal.querySelector('#common-error').textContent = `Произошла ошибка при регистрации клиента:
+            пользователь с таким номером телефона уже существует.
+            Проверьте правильность данных и повторите попытку.`
+            else modal.querySelector('#common-error').textContent = `Произошла ошибка в поле ${res}.
+            Проверьте правильность данных и повторите попытку.`
         };
     });
     deleteBtn.addEventListener('click', async () => {
@@ -163,6 +167,7 @@ export const newAppointment = (date, modal) => {
     saveBtn.textContent = 'Создать';
     saveBtn.addEventListener('click', async () => {
         const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]').value;
+        modal.querySelector('#id_date').disabled = false;
         let res = await fetch('/office/post/appointments/new/', {
             method: 'POST',
             body: new FormData(form),
@@ -170,8 +175,13 @@ export const newAppointment = (date, modal) => {
         }).then(res => res.text());
         if (res === 'Success') window.location.replace('/office/')
         else {
+            modal.querySelector('#id_date').disabled = true;
             console.log(res);
-            modal.querySelector('#common-error').textContent = 'В форме есть ошибки. Проверьте данные формы еще раз и повторите отправку.'
+            if (res == 'client') modal.querySelector('#common-error').textContent = `Произошла ошибка при регистрации клиента:
+            пользователь с таким номером телефона уже существует.
+            Проверьте правильность данных и повторите попытку.`
+            else modal.querySelector('#common-error').textContent = `Произошла ошибка в поле ${res}.
+            Проверьте правильность данных и повторите попытку.`
         };
     });
     initFormChange(modal);

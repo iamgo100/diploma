@@ -1,11 +1,11 @@
 import datetime
 from django.http import HttpResponse
 from django.utils import timezone
-from django.contrib.auth.models import User
 from main.models import Profile
+from main.views import get_or_create_user
 from .models import Appointment, Service, Shift
 from .forms import ServiceForm, ShiftForm, AppointmentForm
-import json, random, string
+import json
 
 list_of_times = [
     datetime.time(9, 0), datetime.time(9, 30), datetime.time(10, 0), datetime.time(10, 30),
@@ -55,29 +55,12 @@ def get_appointment_by_id(request, id):
     }
     return HttpResponse(json.dumps(res_ap))
 
-def get_or_create_client(first_name, phone):
-    # проверяем наличие клиента с таким именем и номером телефона
-    users = User.objects.filter(first_name=first_name)
-    client = None
-    for user in users:
-        client = list(Profile.objects.filter(user=user, phone_number=phone))
-        if client:
-            break
-    if not client: # если такого клиента не оказалось, создаем его
-        letters = string.ascii_lowercase + ''.join(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'])
-        rand_string = ''.join(random.sample(letters, 8))
-        user = User.objects.create(username=phone, password=rand_string, first_name=first_name)
-        client = Profile.objects.create(user=user, phone_number=phone)
-    if type(client) == list:
-        client = client[0]
-    return client
-
 # обновляем данные формы по ее же данным
 def update_form_instance(form_instance):
     service = Service.objects.get(pk=form_instance.get('service'))
     master = Profile.objects.get(pk=form_instance.get('master'))
     shift = Shift.objects.get_or_create(date=form_instance.get('date'), master=master, room=service.room)[0]
-    client = get_or_create_client(form_instance.get('first_name'), form_instance.get('phone_number'))
+    client = get_or_create_user(form_instance.get('first_name'), form_instance.get('phone_number'))
     form_instance.update({'client': client, 'shift': shift})
     return form_instance
 

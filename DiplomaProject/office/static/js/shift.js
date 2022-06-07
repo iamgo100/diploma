@@ -20,7 +20,8 @@ export const renderShiftData = async (id, modal) => {
         if (res === 'Success') window.location.replace('/office/')
         else {
             console.log(res);
-            modal.querySelector('#error-mess-master').textContent = 'Выберите мастера для смены.'
+            modal.querySelector('#common-error').textContent = `Произошла ошибка в поле ${res}.
+            Проверьте правильность данных и повторите попытку.`
         };
     });
     deleteBtn.addEventListener('click', async () => {
@@ -53,7 +54,8 @@ export const newShift = (date, modal) => {
         if (res === 'Success') window.location.replace('/office/')
         else {
             console.log(res);
-            modal.querySelector('#error-mess-master').textContent = 'Выберите мастера для смены.'
+            modal.querySelector('#common-error').textContent = `Произошла ошибка в поле ${res}.
+            Проверьте правильность данных и повторите попытку.`
         };
     });
 };

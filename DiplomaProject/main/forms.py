@@ -3,13 +3,21 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Profile
 
-class SignUpForm(UserCreationForm):
+class SignUpClientForm(UserCreationForm):
     first_name = forms.CharField(label='Ваше имя', help_text='Обязательное поле', required=True)
     last_name = forms.CharField(label='Ваша фамилия', required=False)
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
+
+class SignUpEmplForm(forms.ModelForm):
+    first_name = forms.CharField(label='Имя', help_text='Обязательное поле', required=True)
+    last_name = forms.CharField(label='Фамилия', required=False)
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
 
 class ProfileForm(forms.ModelForm):
     phone_number = forms.CharField(
