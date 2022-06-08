@@ -2,6 +2,7 @@ import datetime
 from django.db.utils import IntegrityError
 from django.http import HttpResponse
 from django.utils import timezone
+from django.contrib.auth.models import User
 from main.models import Profile
 from main.views import get_or_create_user
 from .models import Appointment, Service, Shift
@@ -24,6 +25,20 @@ def get_services(request):
         'service': str(s)
     } for s in Service.objects.all()])
     return HttpResponse(services)
+
+def get_clients_data(request):
+    exclude_client = User.objects.filter(username='deleted_C')
+    if exclude_client != []:
+        exclude_client = exclude_client[0]
+    else:
+        exclude_client = None
+    clients_data = Profile.objects.filter(role='C').exclude(user=exclude_client)
+    clients = [
+        sorted(list(set(map(lambda c: c.user.first_name, clients_data)))),
+        list(clients_data.values_list('phone_number', flat=True))
+    ]
+    print(json.dumps(clients))
+    return HttpResponse(json.dumps(clients))
 
 # возвращает список из БД Записи
 def get_appointments(request):

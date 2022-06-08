@@ -8,17 +8,30 @@ const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
 // отрисовка списка непринятых смен
 const renderUnconfirmedShifts = async () => {
-    const unconfirmedShifts = await fetch('/office/get/shifts/N/').then(res => res.json());
-    if (unconfirmedShifts.length !== 0) {
-        let code = '';
-        unconfirmedShifts.forEach(el => {
-            code += `<li data-id="${el.id}">
-            <span class="list-symbol">•</span>
-            <span>Смена от ${el.date[0]}-${el.date[1]}-${el.date[2]} в зале "${el.room}"</span>
-            <button class="confirm">Принять</button></li>`;
+    const unconfirmedShifts = await fetch('/office/get/shifts/N/').then(res => res.ok ? res.json() : 'Ошибка получения данных');
+    if (unconfirmedShifts != '') {
+        if (unconfirmedShifts.length !== 0) {
+            let code = '';
+            unconfirmedShifts.forEach(el => {
+                code += `<li data-id="${el.id}">
+                <span class="list-symbol">•</span>
+                <span>Смена от ${el.date[0]}-${el.date[1]}-${el.date[2]} в зале "${el.room}"</span>
+                <button class="confirm">Принять</button></li>`;
+            });
+            unconfirmedShiftsList.innerHTML = `<h3>Список непринятых смен</h3><ul>${code}</ul>`;
+        };
+        document.querySelectorAll('.confirm').forEach(el => {
+            el.addEventListener('click', async () => {
+                let sh = el.parentElement.dataset.id;
+                let res = await fetch(
+                    `/office/post/shifts/confirm/${sh}`, 
+                    {method: 'POST', headers: {'X-CSRFToken': csrftoken}})
+                    .then(res => res.text());
+                console.log(res);
+                await renderData();
+            })
         });
-        unconfirmedShiftsList.innerHTML = `<h3>Список непринятых смен</h3><ul>${code}</ul>`;
-    }
+    } else unconfirmedShiftsList.innerHTML = `<h3>Список непринятых смен</h3><p>Ошибка получения данных</p>`;
 };
 
 // отрисовка смен и записей на день
@@ -33,20 +46,11 @@ const renderShiftsAndAppointments = (day) => {
 };
 
 const renderData = async () => {
+    shifts = await fetch('/office/get/shifts/S/').then(res => res.ok ? res.json() : 'Ошибка получения данных');
+    if (shifts != 'Ошибка получения данных') 
+        createCalendar(shiftsCalendar, 'Календарь смен', renderDate, renderShiftsAndAppointments);
+    else createCalendar(shiftsCalendar, 'Календарь смен. Ошибка получения данных');
     await renderUnconfirmedShifts();
-    shifts = await fetch('/office/get/shifts/S/').then(res => res.json());
-    createCalendar(shiftsCalendar, 'Календарь смен', renderDate, renderShiftsAndAppointments);
-    document.querySelectorAll('.confirm').forEach(el => {
-        el.addEventListener('click', async () => {
-            let sh = el.parentElement.dataset.id;
-            let res = await fetch(
-                `/office/post/shifts/confirm/${sh}`, 
-                {method: 'POST', headers: {'X-CSRFToken': csrftoken}})
-                .then(res => res.text());
-            console.log(res);
-            await renderData();
-        })
-    });
 };
 
 let shifts = [];

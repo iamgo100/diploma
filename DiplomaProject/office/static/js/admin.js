@@ -22,8 +22,9 @@ const renderShifts = (day) => {
 };
 
 const modal = initModal();
-const shifts = await fetch('/office/get/shifts/all/').then(res => res.json());
-createCalendar(shiftsCalendar, 'Календарь смен', renderDate, renderShifts);
+const shifts = await fetch('/office/get/shifts/all/').then(res => res.ok ? res.json() : 'Ошибка получения данных');
+if (shifts != 'Ошибка получения данных') createCalendar(shiftsCalendar, 'Календарь смен', renderDate, renderShifts);
+else createCalendar(shiftsCalendar, 'Календарь смен. Ошибка получения данных');
 createCalendar(appointmentsCalendar, 'Календарь записей', renderDate, renderAppointments);
 
 // обработка нажатий на календарь смен

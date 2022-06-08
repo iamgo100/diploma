@@ -12,21 +12,23 @@ const renderInfo = async () => {
         date.type = 'date'
     }
     if (service.value !== currService) {
-        let service_cost = await fetch(`/office/get/service-${service.value}/cost/`).then(res => res.text());
+        let service_cost = await fetch(`/office/get/service-${service.value}/cost/`).then(res => res.ok ? res.text() : 'Ошибка получения данных');
         cost.textContent = service_cost;
     }
     if (service.value !== '' && date.value !== '') {
         if (service.value !== currService || date.value !== currDate) {
             const selectList = await fetch(
                 `/office/get/appointments/time/${date.value}/${service.value}`)
-                .then(res => res.json());
+                .then(res => res.ok ? res.json() : 'Ошибка получения данных');
             let code = '<option value="0">-------</option>'
-            selectList.forEach(el => {
-                code += `<option value="${el[0]}:${el[1]}">${el[0]}:${el[1]}</option>`
-            });
+            if (selectList != '') {
+                selectList.forEach(el => {
+                    code += `<option value="${el[0]}:${el[1]}">${el[0]}:${el[1]}</option>`
+                });
+            } else code += '<option value="ошибка">ошибка получения данных</option>';
             timeSelect.innerHTML = code;
             timeSelect.parentElement.classList.remove('hidden');
-            helpMessage.classList.add('hidden');
+            helpMessage.classList.add('hidden'); 
         };
     };
     currService = service.value;

@@ -8,6 +8,7 @@ urlpatterns = [
     path('admin/services/', views.services, name='services'),
     path('employee/', views.employee, name='employee'),
     path('get/services/', controller.get_services),
+    path('get/clients/', controller.get_clients_data),
     path('get/appointments/', controller.get_appointments),
     path('get/appointments/<int:id>', controller.get_appointment_by_id),
     path('post/appointments/new/', controller.post_appointments_new),
