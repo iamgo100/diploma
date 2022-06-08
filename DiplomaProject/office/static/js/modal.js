@@ -10,6 +10,7 @@ export const initModal = () => {
     btnClose.addEventListener('click', () => {
         modal.classList.add('invisible');
         modal.classList.remove('visible');
+        modal.querySelector('#common-error').textContent = '';
     });
     form.addEventListener('submit', event => event.preventDefault());
     return modal;

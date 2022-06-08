@@ -4,26 +4,30 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from .forms import ProfileForm, SignUpClientForm, SignUpEmplForm, UpdateUserForm
 from .models import Profile
-import json, random, string
+import json, random, string, re
 
 def get_or_create_user(first_name, phone, role='C'):
-    # проверяем наличие клиента с таким именем и номером телефона
-    users = User.objects.filter(first_name=first_name)
-    this_user = None
-    for user in users:
-        this_user = list(Profile.objects.filter(user=user, phone_number=phone))
-        if this_user:
-            break
-    if not this_user: # если такого клиента не оказалось, создаем его
-        letters = string.ascii_lowercase + ''.join(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'])
-        rand_string = ''.join(random.sample(letters, 8))
-        try:
-            user = User.objects.create(username=phone, password=rand_string, first_name=first_name)
-            this_user = Profile.objects.create(user=user, phone_number=phone, role=role)
-        except IntegrityError:
-            this_user = 'unique_error'
-    if type(this_user) == list:
-        this_user = this_user[0]
+    regex = r'^\+?7?\d{10}$'
+    if re.match(regex, phone):
+        # проверяем наличие клиента с таким именем и номером телефона
+        users = User.objects.filter(first_name=first_name)
+        this_user = None
+        for user in users:
+            this_user = list(Profile.objects.filter(user=user, phone_number=phone))
+            if this_user:
+                break
+        if not this_user: # если такого клиента не оказалось, создаем его
+            letters = string.ascii_lowercase + ''.join(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'])
+            rand_string = ''.join(random.sample(letters, 8))
+            try:
+                user = User.objects.create(username=phone, password=rand_string, first_name=first_name)
+                this_user = Profile.objects.create(user=user, phone_number=phone, role=role)
+            except IntegrityError:
+                this_user = 'unique_error'
+        if type(this_user) == list:
+            this_user = this_user[0]
+    else:
+        this_user = 'phone_error'
     return this_user
 
 def index(request):
@@ -52,6 +56,8 @@ def signup(request, role='C'):
                 res = get_or_create_user(first_name, phone, role=role)
                 if res == 'unique_error':
                     return render(request, 'registration/signup.html', {'user_form': user_form, 'profile_form': profile_form, 'unique_error': True})
+                elif res == 'phone_error':
+                    return render(request, 'registration/signup.html', {'user_form': user_form, 'profile_form': profile_form, 'phone_error': True})
             if request.user.is_authenticated:
                 return redirect('office')
             return redirect('login')

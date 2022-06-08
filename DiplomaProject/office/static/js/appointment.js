@@ -66,6 +66,7 @@ const initFormChange = (modal, initialTime='') => {
 
 export const showAppointmentForm = async (modal, role) => {
     const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]');
+    const buttons = modal.querySelector('#buttons');
     let servicesData = await fetch('/office/get/services/').then(res => res.json());
     let servicesCode = ''
     servicesData.forEach(el => servicesCode += `<option value="${el.id}">${el.service}</option>`)
@@ -73,24 +74,25 @@ export const showAppointmentForm = async (modal, role) => {
     form.innerHTML = `
     <p>
         <label for="id_first_name">Имя клиента: </label>
-        <input name="first_name" id="id_first_name">
+        <input name="first_name" id="id_first_name" required>
     </p>
     <p>
         <label for="id_phone_number">Номер телефона клиента: </label>
-        <input name="phone_number" id="id_phone_number">
+        <input name="phone_number" id="id_phone_number" required>
+        <span class="helptext">Номер телефона необходимо вводить в формате: '+79991234567'</span>
     </p>
     <p>
         <label for="id_service">Услуга: </label>
-        <select name="service" id="id_service"><option value="">--------</option>${servicesCode}</select>
+        <select name="service" id="id_service" required><option value="" selected>--------</option>${servicesCode}</select>
     </p>
     <p>Цена услуги: <span id="cost">0</span> рублей</p>
     <p>
         <label for="id_date">Дата: </label>
-        <input type="date" name="date" id="id_date">
+        <input type="date" name="date" id="id_date" required>
     </p>
     <p>
         <label for="id_time">Время: </label>
-        <select name="time" id="id_time"><option value="">--------</option></select>
+        <select name="time" id="id_time" required><option value="" selected>--------</option></select>
     </p>
     `
     if (role === 'A') {
@@ -100,18 +102,39 @@ export const showAppointmentForm = async (modal, role) => {
         form.innerHTML += `
         <p>
             <label for="id_master">Мастер смены: </label>
-            <select name="master" id="id_master"><option value="">--------</option>${mastersCode}</select>
+            <select name="master" id="id_master"><option value="" selected>--------</option>${mastersCode}</select>
         <p>
         `
     } else {
         form.querySelector('#id_date').disabled = true;
     }
     form.prepend(csrftoken);
+    form.append(buttons);
 }
+
+const checkMaster = (modal) => {
+    let form = new FormData(modal.querySelector('form'));
+    if (modal.querySelector('#id_master') && form.get('master') === '')
+        form.set('master', 'null')
+    return form
+};
+
+const getAnswer = (res, modal) => {
+    if (res === 'Success') window.location.replace('/office/')
+    else {
+        const errorField = modal.querySelector('#common-error')
+        console.log(res);
+        if (res == 'unique_error') errorField.textContent = `Произошла ошибка при регистрации клиента:
+            пользователь с таким номером телефона уже существует. Проверьте правильность данных и повторите попытку.`
+        else if (res == 'phone_error') errorField.textContent = `Произошла ошибка при регистрации клиента:
+            номер телефона был введен в неверном формате. Проверьте правильность данных и повторите попытку.`
+        else errorField.textContent = `Произошла ошибка отправки данных. Проверьте правильность данных и повторите попытку.`
+    };
+};
 
 export const renderAppointmentData = async (id, modal) => {
     if (modal.querySelector('#btn-delete') === null)
-        modal.querySelector('.form').innerHTML += '<button id="btn-delete">Удалить</button>';
+        modal.querySelector('#buttons').innerHTML += '<button id="btn-delete">Удалить</button>';
     let res = await fetch(`/office/get/appointments/${id}`).then(res => res.json());
     let {client_name, client_phone, date, time, service_id, master_id} = res;
     renderTime(date, service_id, modal, time);
@@ -128,21 +151,16 @@ export const renderAppointmentData = async (id, modal) => {
     const saveBtn = modal.querySelector('#btn-submit');
     saveBtn.textContent = 'Сохранить';
     saveBtn.addEventListener('click', async () => {
-        const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]').value;
-        let res = await fetch(`/office/post/appointments/update/${id}`, {
-            method: 'POST',
-            body: new FormData(form),
-            headers: {'X-CSRFToken': csrftoken}
-        }).then(res => res.text());
-        if (res === 'Success') window.location.replace('/office/')
-        else {
-            console.log(res);
-            if (res == 'client') modal.querySelector('#common-error').textContent = `Произошла ошибка при регистрации клиента:
-            пользователь с таким номером телефона уже существует.
-            Проверьте правильность данных и повторите попытку.`
-            else modal.querySelector('#common-error').textContent = `Произошла ошибка в поле ${res}.
-            Проверьте правильность данных и повторите попытку.`
-        };
+        if (form.checkValidity()){
+            let f = checkMaster(modal);
+            const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]').value;
+            let res = await fetch(`/office/post/appointments/update/${id}`, {
+                method: 'POST',
+                body: f,
+                headers: {'X-CSRFToken': csrftoken}
+            }).then(res => res.text());
+            getAnswer(res, modal);
+        }
     });
     deleteBtn.addEventListener('click', async () => {
         const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -166,23 +184,17 @@ export const newAppointment = (date, modal) => {
     const saveBtn = modal.querySelector('#btn-submit');
     saveBtn.textContent = 'Создать';
     saveBtn.addEventListener('click', async () => {
-        const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]').value;
-        modal.querySelector('#id_date').disabled = false;
-        let res = await fetch('/office/post/appointments/new/', {
-            method: 'POST',
-            body: new FormData(form),
-            headers: {'X-CSRFToken': csrftoken}
-        }).then(res => res.text());
-        if (res === 'Success') window.location.replace('/office/')
-        else {
-            modal.querySelector('#id_date').disabled = true;
-            console.log(res);
-            if (res == 'client') modal.querySelector('#common-error').textContent = `Произошла ошибка при регистрации клиента:
-            пользователь с таким номером телефона уже существует.
-            Проверьте правильность данных и повторите попытку.`
-            else modal.querySelector('#common-error').textContent = `Произошла ошибка в поле ${res}.
-            Проверьте правильность данных и повторите попытку.`
-        };
+        if (form.checkValidity()){
+            let f = checkMaster(modal);
+            const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]').value;
+            modal.querySelector('#id_date').disabled = false;
+            let res = await fetch('/office/post/appointments/new/', {
+                method: 'POST',
+                body: f,
+                headers: {'X-CSRFToken': csrftoken}
+            }).then(res => res.text());
+            getAnswer(res, modal);
+        }
     });
     initFormChange(modal);
 };

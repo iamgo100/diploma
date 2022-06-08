@@ -44,6 +44,7 @@
     border: 1px #8c6dbd solid;
     background-color: #fff;
     color: #8c6dbd;
+    margin-left: 10px;
 }
 #btn-delete:hover {
     background-color: #8c6dbd33;

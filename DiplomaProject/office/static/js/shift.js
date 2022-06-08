@@ -1,6 +1,6 @@
 export const renderShiftData = async (id, modal) => {
     if (modal.querySelector('#btn-delete') === null)
-        modal.querySelector('.form').innerHTML += '<button id="btn-delete">Удалить</button>';
+        modal.querySelector('#buttons').innerHTML += '<button id="btn-delete">Удалить</button>';
     let {date, master_id, room_id} = await fetch(`/office/get/shifts/${id}`).then(res => res.json());
     modal.querySelector('#id_date').value = date;
     modal.querySelector('.modal-title').textContent = 'Редактирование смены';
@@ -11,18 +11,20 @@ export const renderShiftData = async (id, modal) => {
     const saveBtn = modal.querySelector('#btn-submit');
     saveBtn.textContent = 'Сохранить';
     saveBtn.addEventListener('click', async () => {
-        const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]').value;
-        let res = await fetch(`/office/post/shifts/update/${id}`, {
-            method: 'POST',
-            body: new FormData(form),
-            headers: {'X-CSRFToken': csrftoken}
-        }).then(res => res.text());
-        if (res === 'Success') window.location.replace('/office/')
-        else {
-            console.log(res);
-            modal.querySelector('#common-error').textContent = `Произошла ошибка в поле ${res}.
-            Проверьте правильность данных и повторите попытку.`
-        };
+        if (form.checkValidity()){
+            const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]').value;
+            let res = await fetch(`/office/post/shifts/update/${id}`, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: {'X-CSRFToken': csrftoken}
+            }).then(res => res.text());
+            if (res === 'Success') window.location.replace('/office/')
+            else {
+                console.log(res);
+                modal.querySelector('#common-error').textContent = `Произошла ошибка отправки данных.
+                Проверьте правильность данных и повторите попытку.`
+            };
+        }
     });
     deleteBtn.addEventListener('click', async () => {
         const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -45,18 +47,20 @@ export const newShift = (date, modal) => {
     const saveBtn = modal.querySelector('#btn-submit');
     saveBtn.textContent = 'Создать';
     saveBtn.addEventListener('click', async () => {
-        const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]').value;
-        let res = await fetch('/office/post/shifts/new/', {
-            method: 'POST',
-            body: new FormData(form),
-            headers: {'X-CSRFToken': csrftoken}
-        }).then(res => res.text());
-        if (res === 'Success') window.location.replace('/office/')
-        else {
-            console.log(res);
-            modal.querySelector('#common-error').textContent = `Произошла ошибка в поле ${res}.
-            Проверьте правильность данных и повторите попытку.`
-        };
+        if (form.checkValidity()){
+            const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]').value;
+            let res = await fetch('/office/post/shifts/new/', {
+                method: 'POST',
+                body: new FormData(form),
+                headers: {'X-CSRFToken': csrftoken}
+            }).then(res => res.text());
+            if (res === 'Success') window.location.replace('/office/')
+            else {
+                console.log(res);
+                modal.querySelector('#common-error').textContent = `Произошла ошибка отправки данных.
+                Проверьте правильность данных и повторите попытку.`
+            };
+        }
     });
 };
 
@@ -65,27 +69,29 @@ export const showShiftForm = async (modal) => {
     let mastersCode = ''
     mastersData.forEach(el => mastersCode += `<option value="${el.master_id}">${el.master}</option>`)
     const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]');
+    const buttons = modal.querySelector('#buttons');
     const form = modal.querySelector('form');
     form.innerHTML = `
     <p>
         <label for="date">Дата: </label>
-        <input type="date" name="date" id="id_date"/>
+        <input type="date" name="date" id="id_date" required>
     </p>
     <p>
         <label for="master">Мастер смены: </label>
-        <select name="master" id="id_master">
-            <option value="0">--------</option>
+        <select name="master" id="id_master" required>
+            <option value="" selected>--------</option>
             ${mastersCode}
         </select>
         <span class="errorlist" id="error-mess-master"></span>
     </p>
     <p>
         <label for="room">Зал: </label>
-        <select name="room" id="id_room">
-            <option value="1">Парикмахерский</option>
+        <select name="room" id="id_room" required>
+            <option value="1" selected>Парикмахерский</option>
             <option value="2">Маникюрный</option>
         </select>
     </p>
     `
     form.prepend(csrftoken);
+    form.append(buttons);
 };

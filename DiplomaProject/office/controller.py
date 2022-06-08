@@ -58,8 +58,11 @@ def get_appointment_by_id(request, id):
 # обновляем данные формы по ее же данным
 def update_form_instance(form_instance):
     service = Service.objects.get(pk=form_instance.get('service'))
-    master = Profile.objects.get(pk=form_instance.get('master'))
-    shift = Shift.objects.get_or_create(date=form_instance.get('date'), master=master, room=service.room)[0]
+    if form_instance.get('master'):
+        master = Profile.objects.get(pk=form_instance.get('master'))
+        shift = Shift.objects.get_or_create(date=form_instance.get('date'), master=master, room=service.room)[0]
+    else:
+        shift = None
     client = get_or_create_user(form_instance.get('first_name'), form_instance.get('phone_number'))
     form_instance.update({'client': client, 'shift': shift})
     return form_instance
@@ -68,7 +71,9 @@ def post_appointments_new(request):
     if request.method == 'POST':
         form_instance = request.POST
         form_instance = form_instance.copy()
-        if not form_instance.get('master'):
+        if form_instance.get('master') == 'null':
+            form_instance.update({'master': None})
+        elif not form_instance.get('master'):
             form_instance.update({'master': request.user.profile.id})
         form_instance = update_form_instance(form_instance) # обновляем данные формы
         # создаем через форму новую запись
@@ -77,13 +82,16 @@ def post_appointments_new(request):
             form.save()
             return HttpResponse('Success')
         else:
-            return HttpResponse(form.errors)
+            print(form.errors.as_data())
+            return HttpResponse(form_instance.get('client'))
     return HttpResponse('Error')
 
 def post_appointments_update(request, id):
     if request.method == 'POST':
         form_instance = request.POST
         form_instance = form_instance.copy()
+        if form_instance.get('master') == 'null':
+            form_instance.update({'master': None})
         form_instance = update_form_instance(form_instance) # получаем и обновляем данные формы
         # через форму записи проверяем введенные данные и сохраняем их, если все верно
         form = AppointmentForm(form_instance, instance=Appointment.objects.get(pk=id))
@@ -91,7 +99,8 @@ def post_appointments_update(request, id):
             form.save()
             return HttpResponse('Success')
         else:
-            return HttpResponse(form.errors)
+            print(form.errors.as_data())
+            return HttpResponse(form_instance.get('client'))
     return HttpResponse('Error')
 
 def post_appointments_delete(request, id):
@@ -152,7 +161,7 @@ def post_shifts_new(request):
             form.save()
             return HttpResponse('Success')
         else:
-            return HttpResponse(form.errors)
+            print(form.errors.as_data())
     return HttpResponse('Error')
 
 def post_shifts_update(request, id):
@@ -165,7 +174,7 @@ def post_shifts_update(request, id):
             shift.save()
             return HttpResponse('Success')
         else:
-            return HttpResponse(form.errors)
+            print(form.errors.as_data())
     return HttpResponse('Error')
 
 def post_shifts_delete(request, id):
@@ -238,6 +247,17 @@ def get_service_cost(request, id):
     service_cost = Service.objects.get(pk=id).cost
     return HttpResponse(str(service_cost))
 
+def service_errors(errors_dict):
+    res = []
+    for key in errors_dict.keys():
+        if key == 'service_name':
+            res.append('услуга')
+        if key == 'cost':
+            res.append('цена')
+        if key == 'duration':
+            res.append('длительность')
+    return ', '.join(res)
+
 def post_service_new(request):
     if request.method == 'POST':
         form = ServiceForm(request.POST)
@@ -245,7 +265,8 @@ def post_service_new(request):
             form.save()
             return HttpResponse('Success')
         else:
-            return HttpResponse(form.errors)
+            print(form.errors.as_data())
+            return HttpResponse(service_errors(form.errors.as_data()))
     return HttpResponse('Error')
 
 def post_service_update(request, id):
@@ -255,7 +276,8 @@ def post_service_update(request, id):
             form.save()
             return HttpResponse('Success')
         else:
-            return HttpResponse(form.errors)
+            print(form.errors.as_data())
+            return HttpResponse(service_errors(form.errors.as_data()))
     return HttpResponse('Error')
 
 def post_service_delete(request, id):

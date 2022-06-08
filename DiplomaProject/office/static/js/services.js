@@ -3,46 +3,48 @@ import {initModal, showModal} from './modal.js';
 
 const showServiceForm = (modal) => {
     const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]');
+    const buttons = modal.querySelector('#buttons');
     const form = modal.querySelector('form');
     form.innerHTML = `
     <p>
         <label for="id_service_name">Название услуги: </label>
-        <input type="text" name="service_name" maxlength="100" required="" id="id_service_name">
+        <input type="text" name="service_name" maxlength="100" required id="id_service_name">
         <span class="helptext">Название должно быть уникальным.</span>
     </p>
     <p>
         <label for="id_cost">Цена: </label>
-        <input type="number" name="cost" step="0.01" required="" id="id_cost">
+        <input type="number" name="cost" step="0.01" required id="id_cost">
     </p>
     <p>
         <label for="id_duration">Длительность: </label>
-        <input type="number" name="duration" required="" id="id_duration">
+        <input type="number" name="duration" required id="id_duration">
         <span class="helptext">Введите длительность услуги в минутах.</span>
     </p>
     <p>
         <label for="id_room">Зал: </label>
-        <select name="room" required="" id="id_room">
-            <option value="">---------</option>
+        <select name="room" required id="id_room">
+            <option value="" selected>---------</option>
             <option value="1">Парикмахерский</option>
             <option value="2">Маникюрный</option>
         </select>
     </p>
     `
     form.prepend(csrftoken);
+    form.append(buttons);
 };
 
-const getAnswer = (res) => {
+const getAnswer = (res, modal) => {
     if (res === 'Success') window.location.replace('/office/admin/services/')
     else {
         console.log(res);
-        modal.querySelector('#common-error').textContent = `Произошла ошибка в поле ${res}.
+        modal.querySelector('#common-error').textContent = `Произошла ошибка в поле(полях) ${res}.
         Проверьте правильность данных и повторите попытку.`
     };
 }
 
 const renderServiceData = (row, modal) => {
     if (modal.querySelector('#btn-delete') === null)
-        modal.querySelector('.form').innerHTML += '<button id="btn-delete">Удалить</button>';
+        modal.querySelector('#buttons').innerHTML += '<button id="btn-delete">Удалить</button>';
     const values = row.childNodes;
     modal.querySelector('#id_service_name').value = values[0].textContent;
     modal.querySelector('#id_cost').value = parseFloat(values[1].textContent);
@@ -54,13 +56,15 @@ const renderServiceData = (row, modal) => {
     const saveBtn = modal.querySelector('#btn-submit');
     saveBtn.textContent = 'Сохранить';
     saveBtn.addEventListener('click', async () => {
-        const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]').value;
-        let res = await fetch(`/office/post/service/update/${row.dataset.id}`, {
-            method: 'POST',
-            body: new FormData(form),
-            headers: {'X-CSRFToken': csrftoken}
-        }).then(res => res.text());
-        getAnswer(res);
+        if (form.checkValidity()){
+            const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]').value;
+            let res = await fetch(`/office/post/service/update/${row.dataset.id}`, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: {'X-CSRFToken': csrftoken}
+            }).then(res => res.text());
+            getAnswer(res, modal);
+        };
     });
     deleteBtn.addEventListener('click', async () => {
         const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -68,7 +72,11 @@ const renderServiceData = (row, modal) => {
             method: 'POST',
             headers: {'X-CSRFToken': csrftoken}
         }).then(res => res.text());
-        getAnswer(res);
+        if (res === 'Success') window.location.replace('/office/admin/services/')
+        else {
+            console.log(res);
+            modal.querySelector('#common-error').textContent = 'Не удалось удалить запись. Обновите страницу и попробуйте еще раз.'
+        }
     })
 };
 
@@ -76,15 +84,18 @@ const newService = (modal) => {
     modal.querySelector('.modal-title').textContent = 'Новая услуга';
     const form = modal.querySelector('form');
     const saveBtn = modal.querySelector('#btn-submit');
+    console.log(modal);
     saveBtn.textContent = 'Создать';
     saveBtn.addEventListener('click', async () => {
-        const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]').value;
-        let res = await fetch('/office/post/service/new/', {
-            method: 'POST',
-            body: new FormData(form),
-            headers: {'X-CSRFToken': csrftoken}
-        }).then(res => res.text());
-        getAnswer(res);
+        if (form.checkValidity()){
+            const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]').value;
+            let res = await fetch('/office/post/service/new/', {
+                method: 'POST',
+                body: new FormData(form),
+                headers: {'X-CSRFToken': csrftoken}
+            }).then(res => res.text());
+            getAnswer(res, modal);
+        }
     });
 };
 
