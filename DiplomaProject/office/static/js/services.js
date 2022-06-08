@@ -3,7 +3,6 @@ import {initModal, showModal} from './modal.js';
 
 const showServiceForm = (modal) => {
     const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]');
-    const buttons = modal.querySelector('#buttons');
     const form = modal.querySelector('form');
     form.innerHTML = `
     <p>
@@ -30,21 +29,23 @@ const showServiceForm = (modal) => {
     </p>
     `
     form.prepend(csrftoken);
-    form.append(buttons);
+    form.innerHTML += `<div id="buttons"><button type="submit" id="btn-submit"></button></div>`;
 };
 
 const getAnswer = (res, modal) => {
     if (res === 'Success') window.location.replace('/office/admin/services/')
     else {
         console.log(res);
-        modal.querySelector('#common-error').textContent = `Произошла ошибка в поле(полях) ${res}.
-        Проверьте правильность данных и повторите попытку.`
+        const errorField = modal.querySelector('#common-error');
+        if (res == 'unique_service_error') errorField.textContent = `Произошла ошибка добавления услуги.
+            Услуга с таким названием уже существует. Измените название и попробуйте добавить услугу еще раз.`
+        else errorField.textContent = `Произошла ошибка в поле(полях) ${res}. Проверьте правильность данных и повторите попытку.`
     };
 }
 
 const renderServiceData = (row, modal) => {
     if (modal.querySelector('#btn-delete') === null)
-        modal.querySelector('#buttons').innerHTML += '<button id="btn-delete">Удалить</button>';
+        modal.querySelector('#buttons').innerHTML += '<button id="btn-delete" class="btn-back">Удалить</button>';
     const values = row.childNodes;
     modal.querySelector('#id_service_name').value = values[0].textContent;
     modal.querySelector('#id_cost').value = parseFloat(values[1].textContent);

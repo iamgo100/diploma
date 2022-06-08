@@ -40,16 +40,11 @@
 }
 #btn-close:hover {opacity: 50%;}
 #btn-close:active {opacity: 100%;}
-#btn-delete {
-    border: 1px #8c6dbd solid;
-    background-color: #fff;
+.data {
+    width: 90%;
+    padding: 2% 5%;
+}
+.bold-name {
+    font-weight: bold;
     color: #8c6dbd;
-    margin-left: 10px;
-}
-#btn-delete:hover {
-    background-color: #8c6dbd33;
-}
-#btn-delete:active {
-    background-color: #fff;
-    border-width: 2px;
 }

@@ -11,7 +11,7 @@
 .form input, select:focus-visible {
     border-color:#8c6dbd;
 }
-.form button {
+.form button[type='submit'] {
     border: 0px;
     cursor: pointer;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -20,10 +20,10 @@
     border-radius: 3px;
     padding: 7px;
 }
-.form button:hover {
+.form button[type='submit']:hover {
     background-color: #8c6dbd77;
 }
-.form button:active {
+.form button[type='submit']:active {
     background-color: #8c6dbd;
 }
 .form ul {

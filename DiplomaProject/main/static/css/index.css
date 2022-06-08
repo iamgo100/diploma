@@ -132,6 +132,23 @@ a:visited {color: #8c6dbd}
     flex-direction: column;
     align-items: center;
 }
+.btn-back {
+    cursor: pointer;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    border-radius: 3px;
+    padding: 6px;
+    border: 1px #8c6dbd solid;
+    background-color: #fff;
+    color: #8c6dbd;
+    margin-left: 10px;
+}
+.btn-back:hover {
+    background-color: #8c6dbd33;
+}
+.btn-back:active {
+    background-color: #fff;
+    border-width: 2px;
+}
 
 @media (max-width : 1024px) {
     #title {font-size: 28px}

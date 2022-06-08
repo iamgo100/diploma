@@ -1,6 +1,6 @@
 "use strict";
 import {createCalendar, renderDate} from './calendar.js';
-import {renderAppointments, showAppointmentForm, newAppointment} from './appointment.js';
+import {renderAppointments, showAppointmentForm, newAppointment, showAppointmentData} from './appointment.js';
 import {initModal, showModal} from './modal.js';
 const unconfirmedShiftsList = document.getElementById('unconfirmed-shifts');
 const shiftsCalendar = document.getElementById('shifts');
@@ -56,6 +56,7 @@ await renderData();
 // обработка нажатий на календарь
 shiftsCalendar.addEventListener('click', async ({target: t}) => {
     let plus = t.closest('.plus');
+    let appointment = t.closest('.appointment');
     if (plus) { // добавление
         if (plus.parentElement.parentElement.querySelector('.shift')){
             await showAppointmentForm(modal, 'E');
@@ -64,5 +65,8 @@ shiftsCalendar.addEventListener('click', async ({target: t}) => {
             newAppointment(date, modal);
             showModal(modal);
         } else alert('Вы не можете создать запись на эту дату. Обратитесь к администратору салона.')
-    };
+    } else if (appointment) { // просмотр
+        await showAppointmentData(appointment.dataset.id, modal);
+        showModal(modal);
+    }
 });

@@ -1,4 +1,5 @@
 import datetime
+from django.db.utils import IntegrityError
 from django.http import HttpResponse
 from django.utils import timezone
 from main.models import Profile
@@ -33,10 +34,8 @@ def get_appointments(request):
             appointment_list = appointment_list.filter(shift__in=Shift.objects.filter(master=this_user.profile, status='S'))
         appointments = json.dumps([{ # отдаем в json-формате все нужные поля
             'id': a.id, 
-            'client': a.client.user.first_name,
             'date': str(a.date).split('-'),
             'time': str(a.time).split(':'),
-            'service': str(a.service),
             'shift': str(a.shift)
             } for a in appointment_list])
         return HttpResponse(appointments)
@@ -58,12 +57,14 @@ def get_appointment_by_id(request, id):
 # обновляем данные формы по ее же данным
 def update_form_instance(form_instance):
     service = Service.objects.get(pk=form_instance.get('service'))
-    if form_instance.get('master'):
-        master = Profile.objects.get(pk=form_instance.get('master'))
-        shift = Shift.objects.get_or_create(date=form_instance.get('date'), master=master, room=service.room)[0]
-    else:
-        shift = None
-    client = get_or_create_user(form_instance.get('first_name'), form_instance.get('phone_number'))
+    shift = None
+    try:
+        if form_instance.get('master'):
+            master = Profile.objects.get(pk=form_instance.get('master'))
+            shift = Shift.objects.get_or_create(date=form_instance.get('date'), master=master, room=service.room)[0]
+        client = get_or_create_user(form_instance.get('first_name'), form_instance.get('phone_number'))
+    except IntegrityError:
+        client = 'unique_shift_error'
     form_instance.update({'client': client, 'shift': shift})
     return form_instance
 
@@ -82,6 +83,8 @@ def post_appointments_new(request):
             form.save()
             return HttpResponse('Success')
         else:
+            if '__all__' in form.errors.as_data().keys():
+                return HttpResponse('unique_appointment_error')
             print(form.errors.as_data())
             return HttpResponse(form_instance.get('client'))
     return HttpResponse('Error')
@@ -161,6 +164,8 @@ def post_shifts_new(request):
             form.save()
             return HttpResponse('Success')
         else:
+            if '__all__' in form.errors.as_data().keys():
+                return HttpResponse('unique_shift_error')
             print(form.errors.as_data())
     return HttpResponse('Error')
 
@@ -265,6 +270,8 @@ def post_service_new(request):
             form.save()
             return HttpResponse('Success')
         else:
+            if '__all__' in form.errors.as_data().keys():
+                return HttpResponse('unique_service_error')
             print(form.errors.as_data())
             return HttpResponse(service_errors(form.errors.as_data()))
     return HttpResponse('Error')

@@ -7,10 +7,13 @@
         <div class="modal-inner">
             <div class="form">
                 <p id="common-error" class="errorlist"></p>
-                <form method="post" action="">
-                    {% csrf_token %}
-                    <div id="buttons"><button type="submit" id="btn-submit"></button></div>
-                </form>
+                <form method="post" action="">{% csrf_token %}</form>
+            </div>
+            <div class="data invisible">
+                <p><span class="bold-name">Имя клиента: </span><span id="first_name_data"></span></p>
+                <p><span class="bold-name">Услуга: </span><span id="service_data"></span></p>
+                <p><span class="bold-name">Цена услуги: </span><span id="cost"></span></p>
+                <p><span class="bold-name">Время: </span><span id="time_data"></span></p>
             </div>
         </div>
     </div>

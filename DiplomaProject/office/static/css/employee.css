@@ -8,9 +8,11 @@
     text-align: center;
     color: #222;
     overflow: hidden;
-    cursor: default
+    cursor: default;
+    background-color: #8c6dbd33;
 }
 .calendar .centered-cont {cursor: default}
+.calendar .appointment {cursor: pointer;}
 #unconfirmed-shifts {width: 90%;}
 #unconfirmed-shifts ul {padding-left: 0px;}
 #unconfirmed-shifts li {

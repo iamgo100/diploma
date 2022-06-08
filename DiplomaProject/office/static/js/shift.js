@@ -1,6 +1,17 @@
+const getAnswer = (res, modal) => {
+    if (res === 'Success') window.location.replace('/office/')
+    else {
+        console.log(res);
+        const errorField = modal.querySelector('#common-error');
+        if (res == 'unique_shift_error') errorField.textContent = `Произошла ошибка добавления смены.
+            Смена с такими значениями полей Дата и Мастер смены уже существует.`
+        else errorField.textContent = `Произошла ошибка отправки данных. Проверьте правильность данных и повторите попытку.`
+    };
+};
+
 export const renderShiftData = async (id, modal) => {
     if (modal.querySelector('#btn-delete') === null)
-        modal.querySelector('#buttons').innerHTML += '<button id="btn-delete">Удалить</button>';
+        modal.querySelector('#buttons').innerHTML += '<button id="btn-delete" class="btn-back">Удалить</button>';
     let {date, master_id, room_id} = await fetch(`/office/get/shifts/${id}`).then(res => res.json());
     modal.querySelector('#id_date').value = date;
     modal.querySelector('.modal-title').textContent = 'Редактирование смены';
@@ -18,12 +29,7 @@ export const renderShiftData = async (id, modal) => {
                 body: new FormData(form),
                 headers: {'X-CSRFToken': csrftoken}
             }).then(res => res.text());
-            if (res === 'Success') window.location.replace('/office/')
-            else {
-                console.log(res);
-                modal.querySelector('#common-error').textContent = `Произошла ошибка отправки данных.
-                Проверьте правильность данных и повторите попытку.`
-            };
+            getAnswer(res, modal);
         }
     });
     deleteBtn.addEventListener('click', async () => {
@@ -54,12 +60,7 @@ export const newShift = (date, modal) => {
                 body: new FormData(form),
                 headers: {'X-CSRFToken': csrftoken}
             }).then(res => res.text());
-            if (res === 'Success') window.location.replace('/office/')
-            else {
-                console.log(res);
-                modal.querySelector('#common-error').textContent = `Произошла ошибка отправки данных.
-                Проверьте правильность данных и повторите попытку.`
-            };
+            getAnswer(res, modal);
         }
     });
 };
@@ -69,7 +70,6 @@ export const showShiftForm = async (modal) => {
     let mastersCode = ''
     mastersData.forEach(el => mastersCode += `<option value="${el.master_id}">${el.master}</option>`)
     const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]');
-    const buttons = modal.querySelector('#buttons');
     const form = modal.querySelector('form');
     form.innerHTML = `
     <p>
@@ -93,5 +93,5 @@ export const showShiftForm = async (modal) => {
     </p>
     `
     form.prepend(csrftoken);
-    form.append(buttons);
+    form.innerHTML += `<div id="buttons"><button type="submit" id="btn-submit"></button></div>`;
 };

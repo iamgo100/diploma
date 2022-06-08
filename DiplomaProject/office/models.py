@@ -48,6 +48,7 @@ class Shift(models.Model):
     class Meta:
         verbose_name = 'Смена'
         verbose_name_plural = 'Смены'
+        constraints = [models.UniqueConstraint(fields=('date', 'master'), name='unique_shift')]
 
     def __str__(self):
         return f'Смена {self.id}'
@@ -125,6 +126,7 @@ class Appointment(models.Model):
     class Meta:
         verbose_name = 'Запись'
         verbose_name_plural = 'Записи'
+        constraints = [models.UniqueConstraint(fields=('client', 'date', 'time'), name='unique_appointment')]
 
     def __str__(self):
         return f'Запись {self.id}'

@@ -10,11 +10,7 @@ export const renderAppointments = (day) => {
         } else {
             code += '<div class="appointment centered-cont confirmed"'
         };
-        code += ` data-id="${el.id}">
-        <span class="name">${el.client}</span>
-        <span class="property">${el.time[0]}:${el.time[1]}</span>
-        <span class="property">${el.service}</span>
-        </div>`
+        code += ` data-id="${el.id}">${el.time[0]}:${el.time[1]}</div>`
     });
     return code;
 };
@@ -46,7 +42,7 @@ const renderTime = async (date, service_id, modal, initialTime='') => {
 const renderAppointmentInfo = async (currService, currDate, modal, initialTime='') => {
     const service = modal.querySelector('#id_service');
     const date = modal.querySelector('#id_date');
-    if (service.value !== currService) {renderCost(service.value, modal)};
+    if (service.value !== currService) renderCost(service.value, modal);
     if (service.value !== '' && date.value !== '') {
         if (service.value !== currService || date.value !== currDate)
             renderTime(date.value, service.value, modal, initialTime);
@@ -66,7 +62,6 @@ const initFormChange = (modal, initialTime='') => {
 
 export const showAppointmentForm = async (modal, role) => {
     const csrftoken = modal.querySelector('[name=csrfmiddlewaretoken]');
-    const buttons = modal.querySelector('#buttons');
     let servicesData = await fetch('/office/get/services/').then(res => res.json());
     let servicesCode = ''
     servicesData.forEach(el => servicesCode += `<option value="${el.id}">${el.service}</option>`)
@@ -109,7 +104,7 @@ export const showAppointmentForm = async (modal, role) => {
         form.querySelector('#id_date').disabled = true;
     }
     form.prepend(csrftoken);
-    form.append(buttons);
+    form.innerHTML += `<div id="buttons"><button type="submit" id="btn-submit"></button></div>`;
 }
 
 const checkMaster = (modal) => {
@@ -128,13 +123,31 @@ const getAnswer = (res, modal) => {
             пользователь с таким номером телефона уже существует. Проверьте правильность данных и повторите попытку.`
         else if (res == 'phone_error') errorField.textContent = `Произошла ошибка при регистрации клиента:
             номер телефона был введен в неверном формате. Проверьте правильность данных и повторите попытку.`
+        else if (res == 'unique_appointment_error') errorField.textContent = `Произошла ошибка добавления записи.
+            Запись с такими значениями полей Имя клиента, Номер телефона клиента, Дата и Время уже существует.`
+        else if (res == 'unique_shift_error') errorField.textContent = `Произошла ошибка добавления записи.
+            Вы не можете добавить запись в другой зал. Обратитесь к администратору салона.`
         else errorField.textContent = `Произошла ошибка отправки данных. Проверьте правильность данных и повторите попытку.`
     };
 };
 
+export const showAppointmentData = async (id, modal) => {
+    modal.querySelector('.form').classList.add('invisible');
+    let res = await fetch(`/office/get/appointments/${id}`).then(res => res.json());
+    let servicesData = await fetch('/office/get/services/').then(res => res.json());
+    let { service } = servicesData.filter(el => el.id == res.service_id)[0];
+    modal.querySelector('#first_name_data').textContent = res.client_name;
+    modal.querySelector('#time_data').textContent = `${res.time[0]}:${res.time[1]}`;
+    modal.querySelector('#service_data').textContent = service;
+    await renderCost(res.service_id, modal.querySelector('.data'));
+    const dateArr = res.date.split('-')
+    modal.querySelector('.modal-title').innerHTML = `Запись на <span class="bold-name">${dateArr[2]}.${dateArr[1]}.${dateArr[0]}</span>`;
+    modal.querySelector('.data').classList.remove('invisible');
+};
+
 export const renderAppointmentData = async (id, modal) => {
     if (modal.querySelector('#btn-delete') === null)
-        modal.querySelector('#buttons').innerHTML += '<button id="btn-delete">Удалить</button>';
+        modal.querySelector('#buttons').innerHTML += '<button id="btn-delete" class="btn-back">Удалить</button>';
     let res = await fetch(`/office/get/appointments/${id}`).then(res => res.json());
     let {client_name, client_phone, date, time, service_id, master_id} = res;
     renderTime(date, service_id, modal, time);
