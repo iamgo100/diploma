@@ -1,0 +1,11 @@
+version: "3"
+services:
+  diplomaproject:
+    build: ./DiplomaProject
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./DiplomaProject:/app
+    command: 
+      - cd app
+      - python manage.py runserver 0.0.0.0:8000
