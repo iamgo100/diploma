@@ -46,7 +46,7 @@ const renderTime = async (date, service_id, modal, initialTime='') => {
 const renderAppointmentInfo = async (currService, currDate, modal, initialTime='') => {
     const service = modal.querySelector('#id_service');
     const date = modal.querySelector('#id_date');
-    if (service.value !== currService) renderCost(service.value, modal);
+    if (service.value !== currService && service.value !== '') renderCost(service.value, modal);
     if (service.value !== '' && date.value !== '') {
         if (service.value !== currService || date.value !== currDate)
             renderTime(date.value, service.value, modal, initialTime);

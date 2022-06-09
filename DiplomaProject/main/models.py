@@ -21,7 +21,8 @@ class Profile(models.Model):
         verbose_name='Телефон',
         max_length=12,
         validators=[phone_regex],
-        blank=True
+        blank=True,
+        unique=True
     )
 
     def __str__(self):
