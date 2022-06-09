@@ -1,4 +1,8 @@
-let appointments = await fetch('/office/get/appointments/').then(res => res.ok ? res.json() : 'Ошибка получения данных');
+let appointments = [];
+
+export const getAppointments = async () => {
+    appointments = await fetch('/office/get/appointments/').then(res => res.ok ? res.json() : 'Ошибка получения данных');
+}; 
 
 // отрисовка записей на день
 export const renderAppointments = (day) => {

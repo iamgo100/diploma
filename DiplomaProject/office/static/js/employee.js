@@ -1,6 +1,6 @@
 "use strict";
 import {createCalendar, renderDate} from './calendar.js';
-import {renderAppointments, showAppointmentForm, newAppointment, showAppointmentData} from './appointment.js';
+import {renderAppointments, showAppointmentForm, newAppointment, showAppointmentData, getAppointments} from './appointment.js';
 import {initModal, showModal} from './modal.js';
 const unconfirmedShiftsList = document.getElementById('unconfirmed-shifts');
 const shiftsCalendar = document.getElementById('shifts');
@@ -47,6 +47,7 @@ const renderShiftsAndAppointments = (day) => {
 
 const renderData = async () => {
     shifts = await fetch('/office/get/shifts/S/').then(res => res.ok ? res.json() : 'Ошибка получения данных');
+    await getAppointments();
     if (shifts != 'Ошибка получения данных') 
         createCalendar(shiftsCalendar, 'Календарь смен', renderDate, renderShiftsAndAppointments);
     else createCalendar(shiftsCalendar, 'Календарь смен. Ошибка получения данных');
@@ -54,6 +55,7 @@ const renderData = async () => {
 };
 
 let shifts = [];
+await getAppointments();
 const modal = initModal();
 await renderData();
 
