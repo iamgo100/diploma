@@ -21,7 +21,7 @@ const renderInfo = async () => {
                 `/office/get/appointments/time/${date.value}/${service.value}`)
                 .then(res => res.ok ? res.json() : 'Ошибка получения данных');
             let code = '<option value="0">-------</option>'
-            if (selectList != '') {
+            if (selectList != 'Ошибка получения данных') {
                 selectList.forEach(el => {
                     code += `<option value="${el[0]}:${el[1]}">${el[0]}:${el[1]}</option>`
                 });
