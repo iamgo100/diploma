@@ -38,8 +38,8 @@ shiftsCalendar.addEventListener('click', async ({target: t}) => {
         showModal(modal);
     } else if (plus) { // добавление
         await showShiftForm(modal);
-        let day = Number(plus.parentElement.lastElementChild.textContent);
-        let date = new Date(renderDate.year, renderDate.month, day+1);
+        let date = new Date(plus.parentElement.dataset.day);
+        date.setDate(date.getDate() + 1);
         newShift(date, modal);
         showModal(modal);
     };
@@ -55,8 +55,8 @@ appointmentsCalendar.addEventListener('click', async ({target: t}) => {
         showModal(modal);
     } else if (plus) { // добавление
         await showAppointmentForm(modal, 'A');
-        let day = Number(plus.parentElement.lastElementChild.textContent);
-        let date = new Date(renderDate.year, renderDate.month, day+1);
+        let date = new Date(plus.parentElement.dataset.day);
+        date.setDate(date.getDate() + 1);
         newAppointment(date, modal);
         showModal(modal);
     };

@@ -7,7 +7,7 @@ const getRenderDate = (date) => {
 
 // отрисовка дня календаря
 const renderDay = (day, today, startMonth) => {
-    let code = '<div class="wrapper"><button class="plus">+</button>';
+    let code = `<div class="wrapper" data-day="${day}"><button class="plus">+</button>`;
     if (day.getDate() === today.day && day.getMonth() === today.month && day.getFullYear() === today.year){
         code += '<span class="today day">';
     } else if (day.getMonth() !== startMonth) {

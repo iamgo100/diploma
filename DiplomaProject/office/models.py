@@ -126,7 +126,10 @@ class Appointment(models.Model):
     class Meta:
         verbose_name = 'Запись'
         verbose_name_plural = 'Записи'
-        constraints = [models.UniqueConstraint(fields=('client', 'date', 'time'), name='unique_appointment')]
+        constraints = [
+            models.UniqueConstraint(fields=('client', 'date', 'time'), name='unique_appointment'),
+            models.UniqueConstraint(fields=('shift', 'time'), name='unique_shift_time')
+        ]
 
     def __str__(self):
         return f'Запись {self.id}'
