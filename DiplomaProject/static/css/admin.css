@@ -1,0 +1,7 @@
+@import "./calendar.css";
+@import "./modal.css";
+#shifts {width: 90%;}
+#appointments {
+    width: 90%;
+    margin-top: 20px;
+}

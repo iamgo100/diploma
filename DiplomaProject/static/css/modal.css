@@ -1,0 +1,50 @@
+.visible {display: flex}
+.invisible {display: none}
+.modal-wrapper {
+    position: fixed;
+    left: 0;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: #000000af;
+    z-index: 10;
+}
+.modal {
+    width: 60%;
+    height: 80%;
+    min-width: 300px;
+    background-color: white;
+    overflow-y: auto;
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+}
+.modal-title {
+    text-align: center;
+    width: 100%;
+}
+#btn-close {
+    font-size: xx-large;
+    background-color: #0000;
+    border: 0px;
+    color: #8c6dbd;
+    cursor: pointer;
+    position: relative;
+    top: -10px;
+    right: 10px;
+}
+#btn-close:hover {opacity: 50%;}
+#btn-close:active {opacity: 100%;}
+.data {
+    width: 90%;
+    padding: 2% 5%;
+}
+.bold-name {
+    font-weight: bold;
+    color: #8c6dbd;
+}
