@@ -2,6 +2,7 @@ version: "3"
 
 services:
   django_service:
+    restart: always
     volumes:
       - static:/static
     env_file:
@@ -14,6 +15,7 @@ services:
         aliases:
           - beautymanage.ru
   nginx:
+    restart: always
     build: ./nginx
     volumes:
     - static:/static
