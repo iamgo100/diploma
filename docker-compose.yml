@@ -9,6 +9,10 @@ services:
     build: .
     ports:
       - "8000:8000"
+    networks:
+      mynet:
+        aliases:
+          - beautymanage.ru
   nginx:
     build: ./nginx
     volumes:
@@ -17,6 +21,11 @@ services:
       - "80:80"
     depends_on:
       - django_service
+    networks:
+      - mynet
 
 volumes:
   static:
+
+networks:
+  mynet:
