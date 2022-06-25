@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG')
-ALLOWED_HOSTS = ['5.53.125.221', 'beautymanage.ru', 'localhost']
+ALLOWED_HOSTS = ['5.53.125.221', 'beautymanage.ru', 'localhost', '0.0.0.0']
 
 # Application definition
 
