@@ -46,7 +46,7 @@ const getAnswer = (res, modal) => {
 const renderServiceData = (row, modal) => {
     if (modal.querySelector('#btn-delete') === null)
         modal.querySelector('#buttons').innerHTML += '<button id="btn-delete" class="btn-back">Удалить</button>';
-    const values = row.childNodes;
+    const values = row.querySelectorAll('td');
     modal.querySelector('#id_service_name').value = values[0].textContent;
     modal.querySelector('#id_cost').value = parseFloat(values[1].textContent);
     modal.querySelector('#id_duration').value = values[2].textContent;
@@ -105,7 +105,7 @@ const renderServicesTable = async (modal) => {
     let code = '';
     if (servicesList.length !== [] && servicesList !== 'Ошибка получения данных') {
         code += `<table class="service-table"><thead><tr><td>Название услуги</td><td>Цена</td><td>Длительность<br>(мин.)</td><td>Зал</td></tr></thead><tbody>`;
-        for (s in servicesList) {
+        servicesList.forEach(s => {
             code += `
             <tr data-id="${s.id}" class="srvc-row">
                 <td><span class="chng-srvc">${s.name}</span></td>
@@ -113,7 +113,7 @@ const renderServicesTable = async (modal) => {
                 <td class="center-text">${s.duration}</td>
                 <td class="center-text" data-id="${s.room_id}">${s.room}</td>
             </tr>`
-        };
+        });
         code += '</tbody></table>';
     } else if (servicesList === [] && servicesList !== 'Ошибка получения данных')
         code += '<p>У вас нет ни одной предоставляемой услуги. Создайте ее прямо сейчас!</p>';

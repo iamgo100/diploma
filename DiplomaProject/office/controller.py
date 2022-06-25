@@ -262,7 +262,7 @@ def get_services(request):
         'duration': s.duration,
         'room': s.get_room(s.room),
         'room_id': s.room,
-        'cost': s.cost,
+        'cost': str(s.cost),
         'id': s.id,
         'service': str(s)
     } for s in Service.objects.all().order_by('service_name')]
