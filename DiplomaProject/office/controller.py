@@ -266,7 +266,7 @@ def get_services(request):
         'id': s.id,
         'service': str(s)
     } for s in Service.objects.all().order_by('service_name')]
-    return HttpResponse(services)
+    return HttpResponse(json.dumps(services))
 
 def get_service_cost(request, id):
     service_cost = Service.objects.get(pk=id).cost
