@@ -18,14 +18,6 @@ list_of_times = [
     datetime.time(19, 0), datetime.time(19, 30), datetime.time(20, 0), datetime.time(20, 30)
 ]
 
-# возвращает список из БД Услуги
-def get_services(request):
-    services = json.dumps([{
-        'id': s.id,
-        'service': str(s)
-    } for s in Service.objects.all()])
-    return HttpResponse(services)
-
 def get_clients_data(request):
     exclude_client = User.objects.filter(username='deleted_C')
     if exclude_client != []:
@@ -262,6 +254,19 @@ def get_time_for_appointment(request, year, month, day, service_id):
         if good_time: # если это время в итоге осталось подходящим
             result_free_time_list.append(str(time).split(':')) # добавляем его в список свободного времени для клиента
     return HttpResponse(json.dumps(result_free_time_list))
+
+# возвращает список из БД Услуги
+def get_services(request):
+    services = [{
+        'name': s.service_name,
+        'duration': s.duration,
+        'room': s.get_room(s.room),
+        'room_id': s.room,
+        'cost': s.cost,
+        'id': s.id,
+        'service': str(s)
+    } for s in Service.objects.all().order_by('service_name')]
+    return HttpResponse(services)
 
 def get_service_cost(request, id):
     service_cost = Service.objects.get(pk=id).cost

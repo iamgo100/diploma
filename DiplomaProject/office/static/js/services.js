@@ -85,7 +85,6 @@ const newService = (modal) => {
     modal.querySelector('.modal-title').textContent = 'Новая услуга';
     const form = modal.querySelector('form');
     const saveBtn = modal.querySelector('#btn-submit');
-    console.log(modal);
     saveBtn.textContent = 'Создать';
     saveBtn.addEventListener('click', async () => {
         if (form.checkValidity()){
@@ -100,19 +99,42 @@ const newService = (modal) => {
     });
 };
 
-const modal = initModal();
-const serviceTableBody = document.querySelector('.service-table').querySelector('tbody');
-const createBtn = document.getElementById('create-btn');
-
-serviceTableBody.addEventListener('click', async ({target: t}) => {
-    let row = t.closest('.chng-srvc').closest('.srvc-row');
-    if (row) { // редактирование
-        showServiceForm(modal);
-        renderServiceData(row, modal);
-        showModal(modal);
+const renderServicesTable = async (modal) => {
+    const servicesPlace = document.getElementById('services-list');
+    const servicesList = await fetch('/office/get/services/').then(res => res.json());
+    let code = '';
+    if (servicesList) {
+        code += `<table class="service-table"><thead><tr><td>Название услуги</td><td>Цена</td><td>Длительность<br>(мин.)</td><td>Зал</td></tr></thead><tbody>`;
+        for (s in servicesList) {
+            code += `
+            <tr data-id="${s.id}" class="srvc-row">
+                <td><span class="chng-srvc">${s.name}</span></td>
+                <td class="center-text">${s.cost}</td>
+                <td class="center-text">${s.duration}</td>
+                <td class="center-text" data-id="${s.room_id}">${s.room}</td>
+            </tr>`
+        };
+        code += '</tbody></table>';
+    } else {
+        code += '<p>У вас нет ни одной предоставляемой услуги. Создайте ее прямо сейчас!</p>';
     }
-});
-createBtn.addEventListener('click', () => {
+    servicesPlace.innerHTML = code;
+    if (servicesList) {
+        document.querySelector('.service-table').querySelector('tbody').addEventListener('click', async ({target: t}) => {
+            let row = t.closest('.chng-srvc').closest('.srvc-row');
+            if (row) { // редактирование
+                showServiceForm(modal);
+                renderServiceData(row, modal);
+                showModal(modal);
+            }
+        });
+    }
+};
+
+const modal = initModal();
+await renderServicesTable(modal);
+
+document.getElementById('create-btn').addEventListener('click', () => {
     showServiceForm(modal);
     newService(modal);
     showModal(modal);
