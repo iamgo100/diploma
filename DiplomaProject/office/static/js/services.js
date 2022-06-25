@@ -103,21 +103,21 @@ const renderServicesTable = async (modal) => {
     const servicesPlace = document.getElementById('services-list');
     const servicesList = await fetch('/office/get/services/').then(res => res.ok ? res.json() : 'Ошибка получения данных');
     let code = '';
-    if (servicesList.length !== [] && servicesList !== 'Ошибка получения данных') {
-        code += `<table class="service-table"><thead><tr><td>Название услуги</td><td>Цена</td><td>Длительность<br>(мин.)</td><td>Зал</td></tr></thead><tbody>`;
-        servicesList.forEach(s => {
-            code += `
-            <tr data-id="${s.id}" class="srvc-row">
-                <td><span class="chng-srvc">${s.name}</span></td>
-                <td class="center-text">${s.cost}</td>
-                <td class="center-text">${s.duration}</td>
-                <td class="center-text" data-id="${s.room_id}">${s.room}</td>
-            </tr>`
-        });
-        code += '</tbody></table>';
-    } else if (servicesList === [] && servicesList !== 'Ошибка получения данных')
-        code += '<p>У вас нет ни одной предоставляемой услуги. Создайте ее прямо сейчас!</p>';
-    else code = '<p>Ошибка получения данных</p>';
+    if (servicesList !== 'Ошибка получения данных') {
+        if (servicesList) {
+            code += `<table class="service-table"><thead><tr><td>Название услуги</td><td>Цена</td><td>Длительность<br>(мин.)</td><td>Зал</td></tr></thead><tbody>`;
+            servicesList.forEach(s => {
+                code += `
+                <tr data-id="${s.id}" class="srvc-row">
+                    <td><span class="chng-srvc">${s.name}</span></td>
+                    <td class="center-text">${s.cost}</td>
+                    <td class="center-text">${s.duration}</td>
+                    <td class="center-text" data-id="${s.room_id}">${s.room}</td>
+                </tr>`
+            });
+            code += '</tbody></table>';
+        } else code += '<p>У вас нет ни одной предоставляемой услуги. Создайте ее прямо сейчас!</p>';
+    } else code = '<p>Ошибка получения данных</p>';
     servicesPlace.innerHTML = code;
     const serviceTable = document.querySelector('.service-table');
     if (serviceTable) {
