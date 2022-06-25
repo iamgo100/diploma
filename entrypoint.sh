@@ -4,6 +4,3 @@ python manage.py migrate --no-input
 python manage.py collectstatic --no-input
 
 gunicorn BeautyManageService.wsgi:application --bind 0.0.0.0:8000
-
-sudo systemctl restart nginx
-sudo systemctl restart gunicorn
