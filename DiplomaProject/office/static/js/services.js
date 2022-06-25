@@ -103,7 +103,7 @@ const renderServicesTable = async (modal) => {
     const servicesPlace = document.getElementById('services-list');
     const servicesList = await fetch('/office/get/services/').then(res => res.ok ? res.json() : 'Ошибка получения данных');
     let code = '';
-    if (servicesList && servicesList !== 'Ошибка получения данных') {
+    if (servicesList.length !== [] && servicesList !== 'Ошибка получения данных') {
         code += `<table class="service-table"><thead><tr><td>Название услуги</td><td>Цена</td><td>Длительность<br>(мин.)</td><td>Зал</td></tr></thead><tbody>`;
         for (s in servicesList) {
             code += `
@@ -115,11 +115,13 @@ const renderServicesTable = async (modal) => {
             </tr>`
         };
         code += '</tbody></table>';
-    } else if (!servicesList) code += '<p>У вас нет ни одной предоставляемой услуги. Создайте ее прямо сейчас!</p>';
+    } else if (servicesList === [] && servicesList !== 'Ошибка получения данных')
+        code += '<p>У вас нет ни одной предоставляемой услуги. Создайте ее прямо сейчас!</p>';
     else code = '<p>Ошибка получения данных</p>';
     servicesPlace.innerHTML = code;
-    if (servicesList) {
-        document.querySelector('.service-table').querySelector('tbody').addEventListener('click', async ({target: t}) => {
+    const serviceTable = document.querySelector('.service-table');
+    if (serviceTable) {
+        serviceTable.querySelector('tbody').addEventListener('click', async ({target: t}) => {
             let row = t.closest('.chng-srvc').closest('.srvc-row');
             if (row) { // редактирование
                 showServiceForm(modal);
