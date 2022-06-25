@@ -56,7 +56,7 @@ def get_appointment_by_id(request, id):
         'client_phone': appointment.client.phone_number,
         'date': str(appointment.date),
         'time': str(appointment.time).split(':'),
-        'service_id': appointment.service.id,
+        'service_id': appointment.service.id if appointment.service else '',
         'master_id': appointment.shift.master.id if appointment.shift else ''
     }
     return HttpResponse(json.dumps(res_ap))

@@ -103,9 +103,8 @@ const renderServicesTable = async (modal) => {
     const servicesPlace = document.getElementById('services-list');
     const servicesList = await fetch('/office/get/services/').then(res => res.ok ? res.json() : 'Ошибка получения данных');
     let code = '';
-    console.log(servicesList)
     if (servicesList !== 'Ошибка получения данных') {
-        if (servicesList !== []) {
+        if (servicesList.length !== 0) {
             code += `<table class="service-table"><thead><tr><td>Название услуги</td><td>Цена</td><td>Длительность<br>(мин.)</td><td>Зал</td></tr></thead><tbody>`;
             servicesList.forEach(s => {
                 code += `
